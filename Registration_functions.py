@@ -3,6 +3,7 @@ from Project_2_test.Classes.Class_Student import Student
 from Project_2_test.Classes.Class_School import School
 from Project_2_test.Classes.Class_Teacher import Teacher
 import datetime
+import re
 
 
 def registration():
@@ -30,12 +31,14 @@ def student_registration():
     pr = "\n************* REGISTRATION FORM FOR STUDENTS *************"
     print(pr)
     first_name = input("\nWhat is your first name:\t").strip().capitalize()
-    while check_name(first_name, 2, 20):
-        print("\n*** Enter your first name again. ***")
+    while check_name(first_name, 2, 20) and check_language(first_name):
+        print(f"\n*** Enter your first name again. Wrong length (2-20) or language (en or bg).\
+         Your first name is {first_name} ***")
         first_name = input("\nWhat is your first name:\t").strip().capitalize()
     last_name = input("\nWhat is your last name:\t").strip().capitalize()
-    while check_name(last_name, 5, 20):
-        print("\n*** Enter your last name again. ***")
+    while check_name(last_name, 5, 20) and check_language(last_name):
+        print(f"\n*** Enter your last name again. Wrong length (5-20) or language (en or bg).\
+         Your last name is {last_name} ***")
         last_name = input("\nWhat is your last name:\t").strip().capitalize()
     email = input("\nEnter your e-mail address:\t").strip()
     while check_email(email):
@@ -67,12 +70,14 @@ def teacher_registration():
     pr = "\n************* REGISTRATION FORM FOR TEACHERS *************"
     print(pr)
     first_name = input("\nWhat is your first name?:\t").strip().capitalize()
-    while check_name(first_name, 2, 20):
-        print("\n*** Enter your first name again. ***")
+    while check_name(first_name, 2, 20) and check_language(first_name):
+        print(f"\n*** Enter your first name again. Wrong length (2-20) or language (en or bg).\
+         Your first name is {first_name} ***")
         first_name = input("\nWhat is your first name?:\t").strip().capitalize()
     last_name = input("\nWhat is your last name?:\t").strip().capitalize()
-    while check_name(last_name, 5, 20):
-        print("\n*** Enter your last name again. ***")
+    while check_name(last_name, 5, 20) and check_language(last_name):
+        print(f"\n*** Enter your last name again. Wrong length (5-20) or language (en or bg).\
+         Your last name is {last_name} ***")
         last_name = input("\nWhat is your last name?:\t").strip().capitalize()
     date_of_birth = input("\nOn what date were you born? Enter an integer:\t").strip()
     month_of_birth = input("\nIn what month were you born? Enter an integer:\t").strip()
@@ -168,3 +173,13 @@ def date_check(year, month, day):
         return True
     except:
         return False
+
+
+def check_language(text):
+    if bool(re.search('[а-яА-Я]', text)) and bool(re.search('[A-Za-z]', text)):
+        return False
+    if bool(re.search('[а-яА-Я]', text)):
+        return True
+    if bool(re.search('[A-Za-z]', text)):
+        return True
+    return False

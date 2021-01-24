@@ -65,7 +65,7 @@ def teacher_login():
     password = input("\nEnter a password (enter at least six characters):\t").strip()
     while check_password(password):
         print("\n*** Your password is incorrect. Try again. ***")
-        password= input("\nEnter a password (enter at least six characters):\t").strip()
+        password = input("\nEnter a password (enter at least six characters):\t").strip()
     print("*" * len(pr))
 
     check_database_for_approval = check_login_user("teachers_database_for_approval.csv", email, password, string_name="user")

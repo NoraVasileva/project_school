@@ -29,14 +29,14 @@ class School:
             return False
 # НОВА ФУНКЦИЯ:
 
-    def student_os_path_does_not_exists(self, database):
+    def os_path_does_not_exists(self, database, columns):
         """
         Enter the column names in the student database.
         :param database: the name of the database
         """
         with open(database, "w") as new_file:
             writer = csv.writer(new_file, delimiter="\t")
-            writer.writerow(["First name", "Last name", "E-mail address", "Password"])
+            writer.writerow(columns)
 
     def students_database_for_approval(self, student: Student):
         """
@@ -45,15 +45,17 @@ class School:
         """
         database_1 = "students_database.csv"
         database_2 = "students_database_for_approval.csv"
+        list_columns = ["First name", "Last name", "E-mail address", "Password"]
+
         if not os.path.exists(database_1):
-            self.student_os_path_does_not_exists(database_1)
+            self.os_path_does_not_exists(database_1, list_columns)
         if os.path.exists(database_1):
             self.os_path_exists(database_1, Student)
             if self.os_path_exists is True:
                 print("\n*** You already have a registration! Please login. ***")
                 return
         if not os.path.exists(database_2):
-            self.student_os_path_does_not_exists(database_2)
+            self.os_path_does_not_exists(database_2, list_columns)
         if os.path.exists(database_2):
             self.os_path_exists(database_2, Student)
             if self.os_path_exists is True:
@@ -77,24 +79,6 @@ class School:
                           "you will have user status only ***")
                     print("\n*** You can now login. ***")
 
-# НОВА ФУНКЦИЯ:
-
-    def teacher_os_path_does_not_exists(self, database):
-        """
-        Enter the column names in the teacher database.
-        :param database: the name of the database
-        """
-        with open(database, "w") as new_file:
-            writer = csv.writer(new_file, delimiter="\t")
-            writer.writerow([
-                "First name",
-                "Last name",
-                "E-mail address",
-                "Password",
-                "Class",
-                "Birth",
-                "Work"
-            ])
 
     def teachers_database_for_approval(self, teacher: Teacher):
         """
@@ -103,15 +87,24 @@ class School:
         """
         database_1 = "teachers_database.csv"
         database_2 = "teachers_database_for_approval.csv"
+        list_columns = [
+                "First name",
+                "Last name",
+                "E-mail address",
+                "Password",
+                "Class",
+                "Birth",
+                "Work"
+            ]
         if not os.path.exists(database_1):
-            self.teacher_os_path_does_not_exists(database_1)
+            self.os_path_does_not_exists(database_1, list_columns)
         if os.path.exists(database_1):
             self.os_path_exists(database_1, Teacher)
             if self.os_path_exists is True:
                 print("\n*** You already have a registration! Use login option. ***")
                 return
         if not os.path.exists(database_2):
-            self.teacher_os_path_does_not_exists(database_2)
+            self.os_path_does_not_exists(database_2, list_columns)
         if os.path.exists(database_2):
             self.os_path_exists(database_2, Teacher)
             if self.os_path_exists is True:

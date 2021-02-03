@@ -9,7 +9,9 @@ from Project_2_test.Print.print_functions import print_edit_user, print_edit_use
 
 class School:
 
-# НОВА ФУНКЦИЯ:
+# TODO: да преговоря PANDAS и да намеря bar plot, typora
+# TODO: когато свършим целия проект да променим структурата на въвеждането във файловете, като използваме речници и Pandas
+
     def os_path_exists(self, database, user):
         """
         Check if the email address exists in the database upon registration.
@@ -27,7 +29,6 @@ class School:
             return True
         else:
             return False
-# НОВА ФУНКЦИЯ:
 
     def os_path_does_not_exists(self, database, columns):
         """
@@ -43,21 +44,21 @@ class School:
         Check if the student has already created a registration. If there is no registration, a new one is created.
         :param student: class Student
         """
-        database_1 = "students_database.csv"
-        database_2 = "students_database_for_approval.csv"
+        students_database = "students_database.csv"
+        students_database_for_approval = "students_database_for_approval.csv"
         list_columns = ["First name", "Last name", "E-mail address", "Password"]
 
-        if not os.path.exists(database_1):
-            self.os_path_does_not_exists(database_1, list_columns)
-        if os.path.exists(database_1):
-            self.os_path_exists(database_1, Student)
+        if not os.path.exists(students_database):
+            self.os_path_does_not_exists(students_database, list_columns)
+        if os.path.exists(students_database):
+            self.os_path_exists(students_database, Student)
             if self.os_path_exists is True:
                 print("\n*** You already have a registration! Please login. ***")
                 return
-        if not os.path.exists(database_2):
-            self.os_path_does_not_exists(database_2, list_columns)
-        if os.path.exists(database_2):
-            self.os_path_exists(database_2, Student)
+        if not os.path.exists(students_database_for_approval):
+            self.os_path_does_not_exists(students_database_for_approval, list_columns)
+        if os.path.exists(students_database_for_approval):
+            self.os_path_exists(students_database_for_approval, Student)
             if self.os_path_exists is True:
                 print("\n*** Your registration was already submitted for approval! ***")
                 print("\n*** If your registration is not approved within 24 hours, "
@@ -65,7 +66,7 @@ class School:
                 print("\n*** Use login option. ***")
                 return
             else:
-                with open(database_2, "a") as file:
+                with open(students_database_for_approval, "a") as file:
                     writer = csv.writer(file, delimiter="\t")
                     temp_list = [
                         student.get_first_name(),
@@ -79,14 +80,13 @@ class School:
                           "you will have user status only ***")
                     print("\n*** You can now login. ***")
 
-
     def teachers_database_for_approval(self, teacher: Teacher):
         """
         Check if the teacher has already created a registration. If there is no registration, a new one is created.
         :param teacher: class Teacher
         """
-        database_1 = "teachers_database.csv"
-        database_2 = "teachers_database_for_approval.csv"
+        teachers_database = "teachers_database.csv"
+        teachers_database_for_approval = "teachers_database_for_approval.csv"
         list_columns = [
                 "First name",
                 "Last name",
@@ -96,17 +96,17 @@ class School:
                 "Birth",
                 "Work"
             ]
-        if not os.path.exists(database_1):
-            self.os_path_does_not_exists(database_1, list_columns)
-        if os.path.exists(database_1):
-            self.os_path_exists(database_1, Teacher)
+        if not os.path.exists(teachers_database):
+            self.os_path_does_not_exists(teachers_database, list_columns)
+        if os.path.exists(teachers_database):
+            self.os_path_exists(teachers_database, Teacher)
             if self.os_path_exists is True:
                 print("\n*** You already have a registration! Use login option. ***")
                 return
-        if not os.path.exists(database_2):
-            self.os_path_does_not_exists(database_2, list_columns)
-        if os.path.exists(database_2):
-            self.os_path_exists(database_2, Teacher)
+        if not os.path.exists(teachers_database_for_approval):
+            self.os_path_does_not_exists(teachers_database_for_approval, list_columns)
+        if os.path.exists(teachers_database_for_approval):
+            self.os_path_exists(teachers_database_for_approval, Teacher)
             if self.os_path_exists is True:
                 print("\n*** Your registration was already submitted for approval! ***")
                 print("\n*** If your registration is not approved within 24 hours, "
@@ -114,7 +114,7 @@ class School:
                 print("\n*** Use login option. ***")
                 return
             else:
-                with open(database_2, "a") as file:
+                with open(teachers_database_for_approval, "a") as file:
                     a = teacher.get_first_day_of_work()
                     b = teacher.get_first_month_of_work()
                     c = teacher.get_first_year_of_work()
@@ -147,7 +147,6 @@ class School:
                           "you will have user status only ***")
                     print("\n*** You can now login. ***")
 
-# НОВА ФУНКЦИЯ:
     def os_path_exists_database(self, database):
         with open(database, "r") as file:
             reader = csv.reader(file, delimiter="\t")
@@ -240,7 +239,7 @@ class School:
                         print("*" * 47)
                     else:
                         print("Something went wrong. Contact the administrator.")
-# НОВА ФУНКЦИЯ:
+
     def os_path_exists_group(self, group):
         """
         Check if the group exists in the database.
@@ -257,8 +256,6 @@ class School:
                 return True
             else:
                 return False
-
-# НОВА ФУНКЦИЯ:
 
     def os_path_does_not_exists_group(self, group):
         """

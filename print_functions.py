@@ -1,3 +1,4 @@
+# TODO: Не ми се показва цялата документация, когато маркирам функциите, а само първото изречение. Да попита Милена как да го поправя.
 def print_first_menu():
     """
     Printing menu for registration, login and quit.
@@ -132,3 +133,55 @@ def print_user_options():
           "\n\nChoose a number from 1 to 2 from the below options:"
           "\n\n# 1: Show all teachers\n\n# 2: Quit"
           "\n*************************************************")
+
+# НОВА ФУНКЦИЯ:
+def print_reg_1():
+    """
+    Printing information on existing registration.
+    """
+    print("\n*** You already have a registration! Please login. ***")
+
+# НОВА ФУНКЦИЯ:
+def print_reg_2():
+    """
+    Printing of information regarding the requested registration.
+    """
+    print("\n*** Your registration was already submitted for approval! ***")
+    print("\n*** If your registration is not approved within 24 hours, "
+          "you will have user status only ***")
+    print("\n*** Use login option. ***")
+
+# НОВА ФУНКЦИЯ:
+def print_reg_3():
+    """
+    Printing of information about new registration.
+    """
+    print("\n*** Your registration was successfully submitted for approval! ***")
+    print("\n*** If your registration is not approved within 24 hours, "
+          "you will have user status only ***")
+    print("\n*** You can now login. ***")
+
+# НОВА ФУНКЦИЯ:
+def print_reg_4():
+    """
+    Printing options for approving or rejecting registrations.
+    1: Approve; 2: Reject; 3: Quit
+    """
+    print("\n\nDo you want to approve or reject a registration?"
+          "\n\nChoose a number from 1 to 3 from the below options:"
+          "\n\n# 1: Approve\n\n# 2: Reject\n\n# 3: Quit"
+          "\n\n*********************************************************")
+
+# НОВА ФУНКЦИЯ:
+def print_no_students():
+    """
+    Printing information that there are no students.
+    """
+    print("\n*** There are no students to show yet. ***")
+
+# НОВА ФУНКЦИЯ:
+def print_no_teachers():
+    """
+    Printing information that there are no teachers.
+    """
+    print("\n*** There are no teachers to show yet. ***")

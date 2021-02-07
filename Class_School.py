@@ -1,10 +1,13 @@
 import csv
 import os
-
+# TODO: да попитам Милена дали импортите трябва да са от гитхъб или локални, защото в момента са смесени
 from Github_project_school.Registration_functions import check_name, check_language
+from Github_project_school.print_functions import print_reg_1, print_reg_2, print_reg_3, print_no_students, \
+    print_no_teachers, print_reg_4
 from Project_2_test.Classes.Class_Student import Student
 from Project_2_test.Classes.Class_Teacher import Teacher
 from Project_2_test.Print.print_functions import print_edit_user, print_edit_user_information
+from Project_2_test.Registration.Registration_functions import check_email
 
 
 class School:
@@ -30,14 +33,14 @@ class School:
         else:
             return False
 
-    def os_path_does_not_exists(self, database, columns):
+    def os_path_does_not_exists(self, database, list_of_columns):
         """
         Enter the column names in the student database.
         :param database: the name of the database
         """
         with open(database, "w") as new_file:
             writer = csv.writer(new_file, delimiter="\t")
-            writer.writerow(columns)
+            writer.writerow(list_of_columns)
 
     def students_database_for_approval(self, student: Student):
         """
@@ -53,17 +56,14 @@ class School:
         if os.path.exists(students_database):
             self.os_path_exists(students_database, Student)
             if self.os_path_exists is True:
-                print("\n*** You already have a registration! Please login. ***")
+                print_reg_1()
                 return
         if not os.path.exists(students_database_for_approval):
             self.os_path_does_not_exists(students_database_for_approval, list_columns)
         if os.path.exists(students_database_for_approval):
             self.os_path_exists(students_database_for_approval, Student)
             if self.os_path_exists is True:
-                print("\n*** Your registration was already submitted for approval! ***")
-                print("\n*** If your registration is not approved within 24 hours, "
-                      "you will have user status only ***")
-                print("\n*** Use login option. ***")
+                print_reg_2()
                 return
             else:
                 with open(students_database_for_approval, "a") as file:
@@ -75,10 +75,7 @@ class School:
                         student.get_password()
                     ]
                     writer.writerow([temp_list[0], temp_list[1], temp_list[2], temp_list[3]])
-                    print("\n*** Your registration was successfully submitted for approval! ***")
-                    print("\n*** If your registration is not approved within 24 hours, "
-                          "you will have user status only ***")
-                    print("\n*** You can now login. ***")
+                    print_reg_3()
 
     def teachers_database_for_approval(self, teacher: Teacher):
         """
@@ -101,17 +98,14 @@ class School:
         if os.path.exists(teachers_database):
             self.os_path_exists(teachers_database, Teacher)
             if self.os_path_exists is True:
-                print("\n*** You already have a registration! Use login option. ***")
+                print_reg_1()
                 return
         if not os.path.exists(teachers_database_for_approval):
             self.os_path_does_not_exists(teachers_database_for_approval, list_columns)
         if os.path.exists(teachers_database_for_approval):
             self.os_path_exists(teachers_database_for_approval, Teacher)
             if self.os_path_exists is True:
-                print("\n*** Your registration was already submitted for approval! ***")
-                print("\n*** If your registration is not approved within 24 hours, "
-                      "you will have user status only ***")
-                print("\n*** Use login option. ***")
+                print_reg_2()
                 return
             else:
                 with open(teachers_database_for_approval, "a") as file:
@@ -142,12 +136,14 @@ class School:
                         temp_list[5],
                         temp_list[6]
                     ])
-                    print("\n*** Your registration was successfully submitted for approval! ***")
-                    print("\n*** If your registration is not approved within 24 hours, "
-                          "you will have user status only ***")
-                    print("\n*** You can now login. ***")
+                    print_reg_3()
 
     def os_path_exists_database(self, database):
+        """
+        Check for student accounts in the database.
+        :param database: the name of the database
+        :return: False or list of students
+        """
         with open(database, "r") as file:
             reader = csv.reader(file, delimiter="\t")
             temp_list = []
@@ -164,12 +160,12 @@ class School:
         """
         database = "students_database.csv"
         if not os.path.exists(database):
-            print("\n*** There are no students to show yet. ***")
+            print_no_students()
             return
         else:
             self.os_path_exists_database(database)
             if self.os_path_exists_database is False:
-                print("\n*** There are no students to show yet. ***")
+                print_no_students()
             else:
                 print("\n*** LIST OF STUDENTS IN PRIMARY SCHOOL 'PYTHON' ***")
                 for student in self.os_path_exists_database(database):
@@ -182,12 +178,12 @@ class School:
         """
         database = "teachers_database.csv"
         if not os.path.exists(database):
-            print("\n*** There are no teachers to show yet. ***")
+            print_no_teachers()
             return
         else:
             self.os_path_exists_database(database)
             if self.os_path_exists_database is False:
-                print("\n*** There are no teachers to show yet. ***")
+                print_no_teachers()
                 return
             else:
                 print("\n*** LIST OF TEACHERS IN PRIMARY SCHOOL 'PYTHON' ***")
@@ -246,16 +242,17 @@ class School:
         :param group: the name of the group
         :return: Boolean
         """
-        with open("groups_database.csv", "r") as file:
-            reader = csv.reader(file)
-            for row in reader:
+        if os.path.exists("groups_database.csv"):
+            with open("groups_database.csv", "r") as file:
+                reader = csv.reader(file)
                 temp_list = []
-                if row == group:
-                    temp_list.append(group)
-            if temp_list:
-                return True
-            else:
-                return False
+                for row in reader:
+                    if row == group:
+                        temp_list.append(group)
+                if temp_list:
+                    return True
+                else:
+                    return False
 
     def os_path_does_not_exists_group(self, group):
         """
@@ -323,6 +320,9 @@ class School:
                             print("\n", "*" * len(a))
 
     def show_only_groups(self):
+        """
+        Display groups in the database.
+        """
         if not os.path.exists("groups_database.csv"):
             print(f"\n*** No study classes created yet. ***")
         elif os.path.exists("groups_database.csv"):
@@ -377,188 +377,71 @@ class School:
         else:
             print(f"\n*** {name} do not exists. ***")
 
+# НОВА ФУНКЦИЯ:
+    def os_path_exists_registrations(self, database):
+        """
+        Check if there are existing registrations in the database.
+        :param database: The name of the database
+        :return: False or list of registrations
+        """
+        with open(database, "r") as file:
+            reader = csv.reader(file)
+            temp_list = []
+            for row in reader:
+                temp_list.append(row)
+            if len(temp_list) > 1:
+                return temp_list
+            else:
+                return False
+
     def show_students_database_for_approval(self):
-        if os.path.exists("students_database_for_approval.csv"):
-            with open("students_database_for_approval.csv", "r") as file:
-                reader = csv.reader(file, delimiter="\t")
-                temp_list = []
-                for row in reader:
-                    temp_list.append(row)
-                if len(temp_list) > 1:
-                    print("\n****************** STUDENT REGISTRATIONS LIST ****************")
-                    for student in temp_list:
-                        print("\n", student[0], student[1], student[2])
-                    print("\n\n**************************************************************")
-                    print("\n******************* STUDENT REGISTRATIONS *****************"
-                          "\n\nDo you want to approve or reject a registration?"
-                          "\n\nChoose a number from 1 to 3 from the below options:"
-                          "\n\n# 1: Approve\n\n# 2: Reject\n\n# 3: Quit"
-                          "\n\n*********************************************************")
+        """
+        Display a list of new student registrations with options for approval or rejection.
+        """
+        database = "students_database_for_approval.csv"
+        if not os.path.exists(database):
+            print("\n*** There are no registration requests yet. ***")
+            return
+        else:
+            self.os_path_exists_registrations(database)
+            if self.os_path_exists_registrations is False:
+                print("\n*** There are no registration requests yet. ***")
+                return
+            else:
+                print("\n****************** STUDENT REGISTRATIONS LIST ****************")
+                for student in self.os_path_exists_registrations(database):
+                    print("\n\t\t", student[0], student[1], student[2])
+                print("\n**************************************************************")
+                print("\n******************* STUDENT REGISTRATIONS *****************")
+                print_reg_4()
+                choice_3 = input("\nEnter a number from 1 to 3:\t").strip()
+                while choice_3 != "1" and choice_3 != "2" and choice_3 != "3":
+                    print("\n*** Try again. ***")
                     choice_3 = input("\nEnter a number from 1 to 3:\t").strip()
-                    while choice_3 != "1" and choice_3 != "2" and choice_3 != "3":
+                if choice_3 == "1":
+                    print("\n******************* APPROVAL OF REGISTRATION *****************")
+                    email = input("\nEnter student's e-mail address:\t").strip()
+                    while check_email(email):
                         print("\n*** Try again. ***")
-                        choice_3 = input("\nEnter a number from 1 to 3:\t").strip()
-                    if choice_3 == "1":
-                        print("\n******************* APPROVAL OF REGISTRATION *****************")
                         email = input("\nEnter student's e-mail address:\t").strip()
-                        while email.endswith("@gmail.com") is False and email.endswith("@abv.bg") is False \
-                                and email.endswith("@yahoo.com") is False and email.endswith("@hotmail.com") is False \
-                                and email.endswith("@aol.com") is False and email.endswith("@live.com") is False \
-                                and email.endswith("@outlook.com") is False:
-                            print("\n*** Try again. ***")
-                            email = input("\nEnter student's e-mail address:\t").strip()
-                        print("\n\n*************************************************************")
-                        student = School()
-                        student.find_student(email)
-                    elif choice_3 == "2":
-                        print("\n******************* REJECTION OF REGISTRATION *****************")
-                        email = input("\nEnter student's e-mail address:\t").strip()
-                        while email.endswith("@gmail.com") is False and email.endswith("@abv.bg") is False \
-                                and email.endswith("@yahoo.com") is False and email.endswith("@hotmail.com") is False \
-                                and email.endswith("@aol.com") is False and email.endswith("@live.com") is False \
-                                and email.endswith("@outlook.com") is False:
-                            print("\n*** Try again. ***")
-                            email = input("\nEnter student's e-mail address:\t").strip()
-                        print("\n")
-                        print("*" * 63)
-                        student = School()
-                        student.deny_student(email)
-                    else:
-                        return
-                else:
-                    print("\n*** There are no registration requests yet. ***")
-                    return
-        else:
-            print("\n*** There are no registration requests yet. ***")
-
-    def find_student(self, email):
-        if os.path.exists("students_database_for_approval.csv"):
-            with open("students_database_for_approval.csv", "r") as a_file:
-                reader = csv.reader(a_file, delimiter="\t")
-                temp_list = []
-                for row in reader:
-                    if row[2] == email:
-                        temp_list.append(row[0])
-                        temp_list.append(row[1])
-                        temp_list.append(row[2])
-                        temp_list.append(row[3])
-                if not temp_list:
-                    print(f"\n*** A student with an email address '{email}' does not exist in the database. ***")
-                    return
-                elif len(temp_list) == 4:
-                    if not os.path.exists("students_database.csv"):
-                        with open("students_database.csv", "w") as b_file:
-                            writer = csv.writer(b_file, delimiter="\t")
-                            writer.writerow(["First name", "Last name", "E-mail address", "Password"])
-                    if os.path.exists("students_database.csv"):
-                        with open("students_database.csv", "a") as c_file:
-                            writer = csv.writer(c_file, delimiter="\t")
-                            writer.writerow([
-                                temp_list[0],
-                                temp_list[1],
-                                temp_list[2],
-                                temp_list[3]
-                            ])
-                        print(f"\n*** {temp_list[0]} {temp_list[1]}'s registration was "
-                              f"successfully approved. ***")
-                        with open("students_database_for_approval.csv", "r") as d_file:
-                            students = []
-                            reader = csv.reader(d_file, delimiter="\t")
-                            for row in reader:
-                                if row[2] != temp_list[2]:
-                                    students.append(row)
-                        with open("students_database_for_approval.csv", "w") as e_file:
-                            writer = csv.writer(e_file, delimiter="\t")
-                            for student in students:
-                                writer.writerow(student)
+                    print("\n\n*************************************************************")
                     student = School()
-                    student.show_only_groups()
-                    group = input("\nIn which class you want to add the student? Enter class name:\t").title()
-                    if os.path.exists(f"{group}.csv"):
-                        with open(f"{group}.csv", "a") as f_file:
-                            writer = csv.writer(f_file, delimiter="\t")
-                            writer.writerow([
-                                temp_list[0],
-                                temp_list[1],
-                                temp_list[2]
-                            ])
-                        print(f"\n*** {temp_list[0]} {temp_list[1]} was added successfully "
-                              f"in {group}. ****")
-                    else:
-                        with open(f"{group}.csv", "w") as g_file:
-                            writer = csv.writer(g_file, delimiter="\t")
-                            writer.writerow(["First name", "Last name", "E-mail address"])
-                        with open(f"{group}.csv", "a") as h_file:
-                            writer = csv.writer(h_file, delimiter="\t")
-                            writer.writerow([
-                                        temp_list[0],
-                                        temp_list[1],
-                                        temp_list[2]
-                                    ])
-                            print(f"\n*** The {group} was created successfully. ***"
-                                  f"\n*** {temp_list[0]} {temp_list[1]} was added successfully "
-                                  f"in {group}. ****")
-                    if os.path.exists("groups_database.csv"):
-                        with open("groups_database.csv", "r") as i_file:
-                            reader = csv.reader(i_file, delimiter="t")
-                            temp_list_1 = []
-                            for gr in reader:
-                                if gr == group:
-                                    temp_list_1.append(gr)
-                            if not temp_list_1:
-                                with open("groups_database.csv", "a") as j_file:
-                                    writer = csv.writer(j_file, delimiter="\t")
-                                    writer.writerow([f"{group}"])
-                        return
-                    if not os.path.exists("groups_database.csv"):
-                        with open("groups_database.csv", "a") as k_file:
-                            writer = csv.writer(k_file, delimiter="\t")
-                            writer.writerow([f"{group}"])
-
-    def deny_student(self, email):
-        if os.path.exists("students_database_for_approval.csv"):
-            with open("students_database_for_approval.csv", "r") as file:
-                reader = csv.reader(file, delimiter="\t")
-                temp_list = []
-                for row in reader:
-                    if row[2] == email:
-                        temp_list.append(row[0])
-                        temp_list.append(row[1])
-                        temp_list.append(row[2])
-                        temp_list.append(row[3])
-                if not temp_list:
-                    print(f"\n*** A student with an email address '{email}' does not exist in the database. ***")
-                    return
+                    student.find_student(email)
+                elif choice_3 == "2":
+                    print("\n******************* REJECTION OF REGISTRATION *****************")
+                    email = input("\nEnter student's e-mail address:\t").strip()
+                    while check_email(email):
+                        print("\n*** Try again. ***")
+                        email = input("\nEnter student's e-mail address:\t").strip()
+                    print("\n")
+                    print("*" * 63)
+                    student = School()
+                    student.deny_student(email)
                 else:
-                    if not os.path.exists("users_database.csv"):
-                        with open("users_database.csv", "w") as file_1:
-                            writer = csv.writer(file_1, delimiter="\t")
-                            writer.writerow(["First name", "Last name", "E-mail address", "Password"])
-                    if os.path.exists("users_database.csv"):
-                        with open("users_database.csv", "a") as file_2:
-                            writer = csv.writer(file_2, delimiter="\t")
-                            writer.writerow([
-                                temp_list[0],
-                                temp_list[1],
-                                temp_list[2],
-                                temp_list[3]
-                            ])
-                    with open("students_database_for_approval.csv", "r") as file_3:
-                        students = []
-                        reader = csv.reader(file_3, delimiter="\t")
-                        for row in reader:
-                            if row[2] != temp_list[2]:
-                                students.append(row)
-                    with open("students_database_for_approval.csv", "w") as file_4:
-                        writer = csv.writer(file_4, delimiter="\t")
-                        for student in students:
-                            writer.writerow(student)
-                    print(f"\n*** {temp_list[0]} {temp_list[1]}'s registration was rejected and added "
-                          f"to users database. ***")
-        else:
-            print("\n*** There are no registration requests yet. ***")
+                    return
 
     def show_teachers_database_for_approval(self):
+        # TODO: да използвам функцията os_path_exists_registrations за да съкратя кода
         if os.path.exists("teachers_database_for_approval.csv"):
             with open("teachers_database_for_approval.csv", "r") as file:
                 reader = csv.reader(file, delimiter="\t")
@@ -570,11 +453,8 @@ class School:
                     for teacher in temp_list:
                         print("\n", teacher[0], teacher[1], teacher[2])
                     print("\n\n**************************************************************")
-                    print("\n******************* TEACHER REGISTRATIONS *****************"
-                          "\n\nDo you want to approve or reject a registration?"
-                          "\n\nChoose a number from 1 to 3 from the below options:"
-                          "\n\n# 1: Approve\n\n# 2: Reject\n\n# 3: Quit"
-                          "\n\n*********************************************************")
+                    print("\n******************* TEACHER REGISTRATIONS *****************")
+                    print_reg_4()
                     choice_3 = input("\nEnter a number from 1 to 3: ").strip()
                     while choice_3 != "1" and choice_3 != "2" and choice_3 != "3":
                         print("\n*** Try again. ***")
@@ -582,10 +462,7 @@ class School:
                     if choice_3 == "1":
                         print("\n******************* APPROVAL OF REGISTRATION *****************")
                         email = input("\nEnter teacher's e-mail address:\t").strip()
-                        while email.endswith("@gmail.com") is False and email.endswith("@abv.bg") is False \
-                                and email.endswith("@yahoo.com") is False and email.endswith("@hotmail.com") is False \
-                                and email.endswith("@aol.com") is False and email.endswith("@live.com") is False \
-                                and email.endswith("@outlook.com") is False:
+                        while check_email(email):
                             print("\n*** Try again. ***")
                             email = input("\nEnter teacher's e-mail address:\t").strip()
                         print("\n\n*************************************************************")
@@ -594,10 +471,7 @@ class School:
                     elif choice_3 == "2":
                         print("\n******************* REJECTION OF REGISTRATION *****************")
                         email = input("\nEnter teacher's e-mail address:\t").strip()
-                        while email.endswith("@gmail.com") is False and email.endswith("@abv.bg") is False \
-                                and email.endswith("@yahoo.com") is False and email.endswith("@hotmail.com") is False \
-                                and email.endswith("@aol.com") is False and email.endswith("@live.com") is False \
-                                and email.endswith("@outlook.com") is False:
+                        while check_email(email):
                             print("\n*** Try again. ***")
                             email = input("\nEnter teacher's e-mail address:\t").strip()
                         print("\n")
@@ -609,6 +483,179 @@ class School:
                 else:
                     print("\n*** There are no registration requests yet. ***")
                     return
+        else:
+            print("\n*** There are no registration requests yet. ***")
+
+
+# НОВА ФУНКЦИЯ:
+    def os_path_exists_student(self, email, database):
+        """
+        Check if the email address exists in the database.
+        :param email: student's email address
+        :param database: the name of the database
+        :return: False or list of student information
+        """
+        with open(database, "r") as file:
+            reader = csv.reader(file, delimiter="\t")
+            temp_list = []
+            for row in reader:
+                if row[2] == email:
+                    temp_list.append(row[0])
+                    temp_list.append(row[1])
+                    temp_list.append(row[2])
+                    temp_list.append(row[3])
+            if not temp_list:
+                return False
+            else:
+                return temp_list
+
+# НОВА ФУНКЦИЯ:
+    def write_in_group_database(self, database, file_list):
+        """
+        Add student's information in group database.
+        :param database: the name of the group database
+        :param file_list: list of student's information
+        """
+        with open(database, "a") as file:
+            writer = csv.writer(file, delimiter="\t")
+            writer.writerow([
+                file_list[0],
+                file_list[1],
+                file_list[2]
+            ])
+
+# НОВА ФУНКЦИЯ:
+    def write_in_database(self, database, user_list):
+        """
+        Add user information in the database.
+        :param database: the name of the database
+        :param user_list: list of user's information
+        """
+        with open(database, "a") as file:
+            writer = csv.writer(file, delimiter="\t")
+            writer.writerow([
+                user_list[0],
+                user_list[1],
+                user_list[2],
+                user_list[3]
+            ])
+
+    def find_student(self, email):
+        """
+        Add a student to the database with the option to enter a group.
+        :param email: the student's email address
+        """
+        database_for_approval = "students_database_for_approval.csv"
+        students_database = "students_database.csv"
+        groups_database = "groups_database.csv"
+        list_of_columns = ["First name", "Last name", "E-mail address", "Password"]
+        temp_list = []
+        self.os_path_exists_student(email, database_for_approval)
+        if self.os_path_exists_student is False:
+            print(f"\n*** A student with an email address '{email}' does not exist in the database. ***")
+            return
+        else:
+            if not os.path.exists(students_database):
+                self.os_path_does_not_exists(students_database, list_of_columns)
+            if os.path.exists(students_database):
+                for student in self.os_path_exists_student(email, database_for_approval):
+                    temp_list.append(student)
+                self.write_in_database(students_database, temp_list)
+                print(f"\n*** {temp_list[0]} {temp_list[1]}'s registration was successfully approved. ***")
+                with open(database_for_approval, "r") as file_1:
+                    students = []
+                    reader = csv.reader(file_1, delimiter="\t")
+                    for row in reader:
+                        if row[2] != temp_list[2]:
+                            students.append(row)
+                self.os_path_does_not_exists(database_for_approval, list_of_columns)
+                with open(database_for_approval, "a") as file_2:
+                    writer = csv.writer(file_2, delimiter="\t")
+                    for student in students:
+                        writer.writerow(student)
+            student = School()
+            student.show_only_groups()
+            group = input("\nIn which class you want to add the student? Enter class name:\t").title()
+            while group == "":
+                print("*** Try again. ***")
+                group = input("\nIn which class you want to add the student? Enter class name:\t").title()
+            group_database = f"{group}.csv"
+            if os.path.exists(group_database):
+                self.write_in_group_database(group_database, temp_list)
+                print(f"\n*** {temp_list[0]} {temp_list[1]} was added successfully in {group}. ****")
+            else:
+                self.os_path_does_not_exists(group_database, list_of_columns)
+                self.write_in_group_database(group_database, temp_list)
+                print(f"\n*** The {group} was created successfully. ***"
+                      f"\n*** {temp_list[0]} {temp_list[1]} was added successfully "
+                      f"in {group}. ****")
+        # if os.path.exists(groups_database):
+        #     with open(groups_database, "r") as file_3:
+        #         reader = csv.reader(file_3, delimiter="\t")
+        #         temp_list_1 = []
+        #         for gr in reader:
+        #             if gr == group:
+        #                 temp_list_1.append(gr)
+        #         if not temp_list_1:
+        #             with open(groups_database, "a") as file_4:
+        #                 writer = csv.writer(file_4, delimiter="\t")
+        #                 writer.writerow([f"{group}"])
+        # else:
+        #     with open(groups_database, "a") as file_5:
+        #         writer = csv.writer(file_5, delimiter="\t")
+        #         writer.writerow([f"{group}"])
+
+# НОВА ФУНКЦИЯ:
+    def find_email(self, database, email):
+        """
+        Check for e-mail address in the database.
+        :param database: the name of the database
+        :param email: user's e-mail address
+        :return: False or list of user's information
+        """
+        with open(database, "r") as file:
+            reader = csv.reader(file, delimiter="\t")
+            temp_list = []
+            for row in reader:
+                if row[2] == email:
+                    temp_list.append(row[0])
+                    temp_list.append(row[1])
+                    temp_list.append(row[2])
+                    temp_list.append(row[3])
+            if not temp_list:
+                return False
+            else:
+                return temp_list
+
+    def deny_student(self, email):
+        database_approval = "students_database_for_approval.csv"
+        database_users = "users_database.csv"
+        columns = ["First name", "Last name", "E-mail address", "Password"]
+        student_list = []
+        if os.path.exists(database_approval):
+            self.find_email(database_approval, email)
+            if self.find_email(database_approval, email) is False:
+                print(f"\n*** A student with an email address '{email}' does not exist in the database. ***")
+                return
+            else:
+                if not os.path.exists(database_users):
+                    self.os_path_does_not_exists(database_users, columns)
+                if os.path.exists(database_users):
+                    for user in self.find_email(database_approval, email):
+                        student_list.append(user)
+                    self.write_in_database(database_users, student_list)
+                with open(database_approval, "r") as file:
+                    students = []
+                    reader = csv.reader(file, delimiter="\t")
+                    for row in reader:
+                        if row[2] != student_list[2]:
+                            students.append(row)
+                with open(database_approval, "w") as file_1:
+                    writer = csv.writer(file_1, delimiter="\t")
+                    for student in students:
+                        writer.writerow(student)
+                print(f"\n*** {student_list[0]} {student_list[1]}'s registration was rejected and added "
+                      f"to users database. ***")
         else:
             print("\n*** There are no registration requests yet. ***")
 

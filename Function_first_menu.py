@@ -1,6 +1,6 @@
-from Project_2_test.Login.Login_functions import login
-from Project_2_test.Registration.Registration_functions import registration
-from Project_2_test.Print.print_functions import print_first_menu
+from Registration_functions import registration
+from print_functions import print_first_menu
+from Login_functions import login
 
 
 def first_menu():

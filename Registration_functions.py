@@ -1,7 +1,9 @@
-from Project_2_test.Print.print_functions import print_registration
-from Project_2_test.Classes.Class_Student import Student
-from Project_2_test.Classes.Class_School import School
-from Project_2_test.Classes.Class_Teacher import Teacher
+import csv
+import os
+
+from print_functions import print_registration, print_reg_1, print_reg_2, print_reg_3
+from Class_Student import Student
+from Class_Teacher import Teacher
 import datetime
 import re
 
@@ -22,6 +24,82 @@ def registration():
         teacher_registration()
     else:
         return
+
+
+def students_database_for_approval(student: Student):
+    """
+    Check if the student has already created a registration. If there is no registration, a new one is created.
+    :param student: class Student
+    """
+    students_database = "students_database.csv"
+    students_database_for_approval = "students_database_for_approval.csv"
+    list_columns = ["First name", "Last name", "E-mail address", "Password"]
+
+    if not os.path.exists(students_database):
+        os_path_does_not_exists(students_database, list_columns)
+    if os.path.exists(students_database):
+        os_path_exists(students_database, student)
+        if os_path_exists is True:
+            print_reg_1()
+            return
+    if not os.path.exists(students_database_for_approval):
+        os_path_does_not_exists(students_database_for_approval, list_columns)
+    if os.path.exists(students_database_for_approval):
+        os_path_exists(students_database_for_approval, student)
+        if os_path_exists is True:
+            print_reg_2()
+            return
+        else:
+            with open(students_database_for_approval, "a") as file:
+                writer = csv.writer(file, delimiter="\t")
+                temp_list = [
+                    student.get_first_name(),
+                    student.get_last_name(),
+                    student.get_email(),
+                    student.get_password()
+                ]
+                writer.writerow([temp_list[0], temp_list[1], temp_list[2], temp_list[3]])
+                print_reg_3()
+
+
+def os_path_exists(database, user):
+    """
+    Check if the email address exists in the database upon registration.
+    :param database: the name of the database
+    :param user: class Teacher or class Student
+    :return: Boolean
+    """
+    with open(database, "r") as file:
+        reader = csv.reader(file, delimiter="\t")
+        temp_list = []
+        for row in reader:
+            if row[2] == user.get_email():
+                temp_list.append(row[2])
+    if len(temp_list) == 1:
+        return True
+    else:
+        return False
+
+
+def os_path_does_not_exists(database, list_of_columns):
+    """
+    Enter the column names in the student database.
+    :param database: the name of the database
+    """
+    with open(database, "w") as new_file:
+        writer = csv.writer(new_file, delimiter="\t")
+        writer.writerow(list_of_columns)
+
+
+def os_path_does_not_exists_group(group):
+    """
+    Add a new group to the database.
+    :param group: the name of the group
+    """
+    with open("groups_database.csv", "a") as file:
+        writer = csv.writer(file, newline="")
+        writer.writerow([group])
+        print(f"\n*** The {group} was created successfully. ***")
 
 
 def student_registration():
@@ -57,8 +135,69 @@ def student_registration():
         email=email,
         password=password_1
     )
-    students = School()
-    students.students_database_for_approval(student_reg)
+    students_database_for_approval(student_reg)
+
+
+def teachers_database_for_approval(teacher: Teacher):
+    """
+    Check if the teacher has already created a registration. If there is no registration, a new one is created.
+    :param teacher: class Teacher
+    """
+    teachers_database = "teachers_database.csv"
+    teachers_database_for_approval = "teachers_database_for_approval.csv"
+    list_columns = [
+            "First name",
+            "Last name",
+            "E-mail address",
+            "Password",
+            "Class",
+            "Birth",
+            "Work"
+        ]
+    if not os.path.exists(teachers_database):
+        os_path_does_not_exists(teachers_database, list_columns)
+    if os.path.exists(teachers_database):
+        os_path_exists(teachers_database, teacher)
+        if os_path_exists is True:
+            print_reg_1()
+            return
+    if not os.path.exists(teachers_database_for_approval):
+        os_path_does_not_exists(teachers_database_for_approval, list_columns)
+    if os.path.exists(teachers_database_for_approval):
+        os_path_exists(teachers_database_for_approval, teacher)
+        if os_path_exists is True:
+            print_reg_2()
+            return
+        else:
+            with open(teachers_database_for_approval, "a") as file:
+                a = teacher.get_first_day_of_work()
+                b = teacher.get_first_month_of_work()
+                c = teacher.get_first_year_of_work()
+                work = f"{a}.{b}.{c}"
+                d = teacher.get_date_of_birth()
+                e = teacher.get_month_of_birth()
+                f = teacher.get_year_of_birth()
+                birth = f"{d}.{e}.{f}"
+                writer = csv.writer(file, delimiter="\t")
+                temp_list = [
+                    teacher.get_first_name(),
+                    teacher.get_last_name(),
+                    teacher.get_email(),
+                    teacher.get_password(),
+                    "No study class",
+                    birth,
+                    work
+                ]
+                writer.writerow([
+                    temp_list[0],
+                    temp_list[1],
+                    temp_list[2],
+                    temp_list[3],
+                    temp_list[4],
+                    temp_list[5],
+                    temp_list[6]
+                ])
+                print_reg_3()
 
 
 def teacher_registration():
@@ -112,7 +251,6 @@ def teacher_registration():
         password_1 = input("\nEnter a password (enter at least six characters):\t").strip()
         password_2 = input("\nEnter your password again:\t").strip()
     print("*" * len(pr))
-    teachers = School()
     teacher_reg = Teacher(
         first_name=first_name,
         last_name=last_name,
@@ -126,7 +264,7 @@ def teacher_registration():
         first_month_of_work=first_month_of_work,
         first_year_of_work=first_year_of_work
     )
-    teachers.teachers_database_for_approval(teacher_reg)
+    teachers_database_for_approval(teacher_reg)
 
 
 def check_name(name, min_length_name, max_length_name):

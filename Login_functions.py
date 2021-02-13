@@ -1,9 +1,9 @@
-from Project_2_test.Login.Options_functions import admin_options, user_options, teacher_options
-from Project_2_test.Print.print_functions import print_login
+from Options_functions import admin_options, user_options, teacher_options
+from print_functions import print_login
 import os
 import csv
 
-from Project_2_test.Registration.Registration_functions import check_email
+from Registration_functions import check_email
 
 
 def login():

@@ -1,4 +1,3 @@
-# TODO: Не ми се показва цялата документация, когато маркирам функциите, а само първото изречение. Да попита Милена как да го поправя.
 def print_first_menu():
     """
     Printing menu for registration, login and quit.

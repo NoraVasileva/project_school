@@ -1,6 +1,6 @@
-from Project_2_test.Function_first_menu import first_menu
-from Project_2_test.Login.Login_functions import login
-from Project_2_test.Registration.Registration_functions import registration
+from Function_first_menu import first_menu
+from Login_functions import login
+from Registration_functions import registration
 
 if __name__ == '__main__':
     while True:

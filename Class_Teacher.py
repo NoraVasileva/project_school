@@ -1,4 +1,4 @@
-from Project_2_test.Classes.Class_People import People
+from Class_People import People
 
 
 class Teacher(People):

@@ -26,82 +26,6 @@ def registration():
         return
 
 
-def students_database_for_approval(student: Student):
-    """
-    Check if the student has already created a registration. If there is no registration, a new one is created.
-    :param student: class Student
-    """
-    students_database = "students_database.csv"
-    students_database_for_approval = "students_database_for_approval.csv"
-    list_columns = ["First name", "Last name", "E-mail address", "Password"]
-
-    if not os.path.exists(students_database):
-        os_path_does_not_exists(students_database, list_columns)
-    if os.path.exists(students_database):
-        os_path_exists(students_database, student)
-        if os_path_exists is True:
-            print_reg_1()
-            return
-    if not os.path.exists(students_database_for_approval):
-        os_path_does_not_exists(students_database_for_approval, list_columns)
-    if os.path.exists(students_database_for_approval):
-        os_path_exists(students_database_for_approval, student)
-        if os_path_exists is True:
-            print_reg_2()
-            return
-        else:
-            with open(students_database_for_approval, "a") as file:
-                writer = csv.writer(file, delimiter="\t")
-                temp_list = [
-                    student.get_first_name(),
-                    student.get_last_name(),
-                    student.get_email(),
-                    student.get_password()
-                ]
-                writer.writerow([temp_list[0], temp_list[1], temp_list[2], temp_list[3]])
-                print_reg_3()
-
-
-def os_path_exists(database, user):
-    """
-    Check if the email address exists in the database upon registration.
-    :param database: the name of the database
-    :param user: class Teacher or class Student
-    :return: Boolean
-    """
-    with open(database, "r") as file:
-        reader = csv.reader(file, delimiter="\t")
-        temp_list = []
-        for row in reader:
-            if row[2] == user.get_email():
-                temp_list.append(row[2])
-    if len(temp_list) == 1:
-        return True
-    else:
-        return False
-
-
-def os_path_does_not_exists(database, list_of_columns):
-    """
-    Enter the column names in the student database.
-    :param database: the name of the database
-    """
-    with open(database, "w") as new_file:
-        writer = csv.writer(new_file, delimiter="\t")
-        writer.writerow(list_of_columns)
-
-
-def os_path_does_not_exists_group(group):
-    """
-    Add a new group to the database.
-    :param group: the name of the group
-    """
-    with open("groups_database.csv", "a") as file:
-        writer = csv.writer(file, newline="")
-        writer.writerow([group])
-        print(f"\n*** The {group} was created successfully. ***")
-
-
 def student_registration():
     """
     Registration form for students. Entering personal data.
@@ -138,65 +62,39 @@ def student_registration():
     students_database_for_approval(student_reg)
 
 
-def teachers_database_for_approval(teacher: Teacher):
+def students_database_for_approval(student: Student):
     """
-    Check if the teacher has already created a registration. If there is no registration, a new one is created.
-    :param teacher: class Teacher
+    Check if the student has already created a registration. If there is no registration, a new one is created.
+    :param student: object from class Student
     """
-    teachers_database = "teachers_database.csv"
-    teachers_database_for_approval = "teachers_database_for_approval.csv"
-    list_columns = [
-            "First name",
-            "Last name",
-            "E-mail address",
-            "Password",
-            "Class",
-            "Birth",
-            "Work"
-        ]
-    if not os.path.exists(teachers_database):
-        os_path_does_not_exists(teachers_database, list_columns)
-    if os.path.exists(teachers_database):
-        os_path_exists(teachers_database, teacher)
+    students_database = "students_database.csv"
+    students_database_for_approval = "students_database_for_approval.csv"
+    list_columns = ["First name", "Last name", "E-mail address", "Password"]
+
+    if not os.path.exists(students_database):
+        os_path_does_not_exists(students_database, list_columns)
+    if os.path.exists(students_database):
+        os_path_exists(students_database, student)
         if os_path_exists is True:
             print_reg_1()
             return
-    if not os.path.exists(teachers_database_for_approval):
-        os_path_does_not_exists(teachers_database_for_approval, list_columns)
-    if os.path.exists(teachers_database_for_approval):
-        os_path_exists(teachers_database_for_approval, teacher)
+    if not os.path.exists(students_database_for_approval):
+        os_path_does_not_exists(students_database_for_approval, list_columns)
+    if os.path.exists(students_database_for_approval):
+        os_path_exists(students_database_for_approval, student)
         if os_path_exists is True:
             print_reg_2()
             return
         else:
-            with open(teachers_database_for_approval, "a") as file:
-                a = teacher.get_first_day_of_work()
-                b = teacher.get_first_month_of_work()
-                c = teacher.get_first_year_of_work()
-                work = f"{a}.{b}.{c}"
-                d = teacher.get_date_of_birth()
-                e = teacher.get_month_of_birth()
-                f = teacher.get_year_of_birth()
-                birth = f"{d}.{e}.{f}"
+            with open(students_database_for_approval, "a") as file:
                 writer = csv.writer(file, delimiter="\t")
                 temp_list = [
-                    teacher.get_first_name(),
-                    teacher.get_last_name(),
-                    teacher.get_email(),
-                    teacher.get_password(),
-                    "No study class",
-                    birth,
-                    work
+                    student.get_first_name(),
+                    student.get_last_name(),
+                    student.get_email(),
+                    student.get_password()
                 ]
-                writer.writerow([
-                    temp_list[0],
-                    temp_list[1],
-                    temp_list[2],
-                    temp_list[3],
-                    temp_list[4],
-                    temp_list[5],
-                    temp_list[6]
-                ])
+                writer.writerow([temp_list[0], temp_list[1], temp_list[2], temp_list[3]])
                 print_reg_3()
 
 
@@ -265,6 +163,110 @@ def teacher_registration():
         first_year_of_work=first_year_of_work
     )
     teachers_database_for_approval(teacher_reg)
+
+
+def teachers_database_for_approval(teacher: Teacher):
+    """
+    Check if the teacher has already created a registration. If there is no registration, a new one is created.
+    :param teacher: class Teacher
+    """
+    teachers_database = "teachers_database.csv"
+    teachers_database_for_approval = "teachers_database_for_approval.csv"
+    list_columns = [
+            "First name",
+            "Last name",
+            "E-mail address",
+            "Password",
+            "Class",
+            "Birth",
+            "Work"
+        ]
+    if not os.path.exists(teachers_database):
+        os_path_does_not_exists(teachers_database, list_columns)
+    if os.path.exists(teachers_database):
+        os_path_exists(teachers_database, teacher)
+        if os_path_exists is True:
+            print_reg_1()
+            return
+    if not os.path.exists(teachers_database_for_approval):
+        os_path_does_not_exists(teachers_database_for_approval, list_columns)
+    if os.path.exists(teachers_database_for_approval):
+        os_path_exists(teachers_database_for_approval, teacher)
+        if os_path_exists is True:
+            print_reg_2()
+            return
+        else:
+            with open(teachers_database_for_approval, "a") as file:
+                a = teacher.get_first_day_of_work()
+                b = teacher.get_first_month_of_work()
+                c = teacher.get_first_year_of_work()
+                work = f"{a}.{b}.{c}"
+                d = teacher.get_date_of_birth()
+                e = teacher.get_month_of_birth()
+                f = teacher.get_year_of_birth()
+                birth = f"{d}.{e}.{f}"
+                writer = csv.writer(file, delimiter="\t")
+                temp_list = [
+                    teacher.get_first_name(),
+                    teacher.get_last_name(),
+                    teacher.get_email(),
+                    teacher.get_password(),
+                    "No study class",
+                    birth,
+                    work
+                ]
+                writer.writerow([
+                    temp_list[0],
+                    temp_list[1],
+                    temp_list[2],
+                    temp_list[3],
+                    temp_list[4],
+                    temp_list[5],
+                    temp_list[6]
+                ])
+                print_reg_3()
+
+
+def os_path_exists(database, user):
+    """
+    Check if the email address exists in the database upon registration.
+    :param database: the name of the database
+    :param user: class Teacher or class Student
+    :return: Boolean
+    """
+    with open(database, "r") as file:
+        reader = csv.reader(file, delimiter="\t")
+        temp_list = []
+        for row in reader:
+            if row[2] == user.get_email():
+                temp_list.append(row[2])
+    if len(temp_list) == 1:
+        return True
+    else:
+        return False
+
+
+def os_path_does_not_exists(database, list_of_columns):
+    """
+    Enter the column names in the student database.
+    :param database: the name of the database
+    """
+    with open(database, "w") as new_file:
+        writer = csv.writer(new_file, delimiter="\t")
+        writer.writerow(list_of_columns)
+
+
+def os_path_does_not_exists_group(group):
+    """
+    Add a new group to the database.
+    :param group: the name of the group
+    """
+    with open("groups_database.csv", "a") as file:
+        # TODO: да попитам Милена, защо ми дава грешка на закоментирания ред
+        # writer = csv.writer(file, newline="")
+        writer = csv.writer(file, delimiter="\t")
+        writer.writerow([group])
+        print(f"\n*** The {group} was created successfully. ***")
 
 
 def check_name(name, min_length_name, max_length_name):

@@ -58,10 +58,10 @@ def admin_option_2():
         choice_2 = input("\nEnter a number from 1 to 3:\t")
     if choice_2 == "1":
         student = School()
-        student.show_students_database_for_approval()
+        student.show_students_or_teachers_database_for_approval("students_database_for_approval.csv", "student")
     elif choice_2 == "2":
         teacher = School()
-        teacher.show_teachers_database_for_approval()
+        teacher.show_students_or_teachers_database_for_approval("teachers_database_for_approval.csv", "teacher")
     else:
         return
 

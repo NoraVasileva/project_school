@@ -23,9 +23,9 @@ class School:
 
     def os_path_exists_database(self, database):
         """
-        Check for student accounts in the database.
+        Check for user accounts in the database.
         :param database: the name of the database
-        :return: False or list of students
+        :return: False or list of users
         """
         with open(database, "r") as file:
             reader = csv.reader(file, delimiter="\t")
@@ -83,13 +83,13 @@ class School:
             else:
                 first_name = input("\nEnter teacher's first name: ").capitalize().strip()
                 while check_name(first_name, 2, 20) and check_language(first_name):
-                    print(f"\n*** Enter teacher's first name again. Wrong length (2-20) or language (en or bg).\
-                     You had entered {first_name} ***")
+                    print(f"\n*** Enter teacher's first name again. Wrong length (2-20) or language (en or bg)."
+                          f" You had entered {first_name} ***")
                     first_name = input("\nEnter teacher's first name: ").capitalize().strip()
                 last_name = input("\nEnter teacher's last name: ").capitalize().strip()
                 while check_name(last_name, 5, 20) and check_language(last_name):
-                    print(f"\n*** Enter teacher's name again. Wrong length (5-20) or language (en or bg).\
-                     You had entered {last_name} ***")
+                    print(f"\n*** Enter teacher's name again. Wrong length (5-20) or language (en or bg)."
+                          f" You had entered {last_name} ***")
                     last_name = input("\nEnter teacher's last name: ").capitalize().strip()
                 with open("teachers_database.csv", "r") as file_1:
                     reader = csv.reader(file_1, delimiter="\t")
@@ -642,26 +642,32 @@ class School:
     #         print("\n*** There are no registration requests yet. ***")
 
     def show_users_database(self):
-        if not os.path.exists("users_database.csv"):
+        """
+        Display list of users from users database.
+        """
+        database = "users_database.csv"
+        if not os.path.exists(database):
             print("\n*** There are no users to show yet. ***")
-        if os.path.exists("users_database.csv"):
-            with open("users_database.csv", "r") as file:
-                reader = csv.reader(file, delimiter="\t")
-                temp_list = []
-                for row in reader:
-                    temp_list.append(row)
-            if len(temp_list) == 1:
+        if os.path.exists(database):
+            self.os_path_exists_database(database)
+            if self.os_path_exists_database(database) is False:
                 print("\n*** There are no users to show yet. ***")
             else:
                 printing_users = "\n*** LIST OF USERS IN PRIMARY SCHOOL 'PYTHON' ***"
                 print(printing_users)
-                for user in temp_list:
+                for user in self.os_path_exists_database(database):
                     print("\n\t\t", user[0], user[1], user[2])
                 print("\n")
                 print("*" * len(printing_users))
 
 # TODO: да се довърши:
     def edit_user(self):
+        students_database = "students_database.csv"
+        teachers_database = "teachers_database.csv"
+        users_database = "users_database.csv"
+        people = None
+        person = None
+        database = None
         print_edit_user()
         choice = input("\nEnter a number from 1 to 4:\t")
         while choice != "1" and choice != "2" and choice != "3" and choice != "4":
@@ -670,72 +676,71 @@ class School:
             # "\n\n# 1: Edit student's account\n\n# 2: Edit teacher's account"
             # "\n\n# 3: Edit user's account\n\n# 4: Quit"
         if choice == "1":
-            if not os.path.exists("students_database.csv"):
-                print("\n*** There are no students to show yet. ***")
+            database = students_database
+            people = "students"
+            person = "student"
+        elif choice == "2":
+            database = teachers_database
+            people = "teachers"
+            person = "teacher"
+        elif choice == "3":
+            database = users_database
+            people = "users"
+            person = "user"
+        if not os.path.exists(database):
+            print(f"\n*** There are no {people} to show yet. ***")
+            return
+        if os.path.exists(database):
+            self.os_path_exists_database(database)
+            if self.os_path_exists_database(database) is False:
+                print(f"\n*** There are no {people} to show yet. ***")
                 return
-            if os.path.exists("students_database.csv"):
-                with open("students_database.csv", "r") as file:
-                    reader = csv.reader(file, delimiter="\t")
-                    temp_list = []
-                    for row in reader:
-                        temp_list.append(row)
-                    if len(temp_list) == 1:
-                        print("\n*** There are no students to show yet. ***")
-                        return
-                    else:
-                        printing = "\n*** LIST OF STUDENTS IN PRIMARY SCHOOL 'PYTHON' ***"
-                        print(printing)
-                        for student in temp_list:
-                            print("\n\t\t", student[0], student[1], student[2])
-                        print("*" * len(printing))
-                        email = input("\nEnter the email address of the student whose account"
-                                      " you want to edit:\t").strip()
-                        while email.endswith("@gmail.com") is False and email.endswith("@abv.bg") is False \
-                                and email.endswith("@yahoo.com") is False and email.endswith("@hotmail.com") is False \
-                                and email.endswith("@aol.com") is False and email.endswith("@live.com") is False \
-                                and email.endswith("@outlook.com") is False:
+            else:
+                printing = f"\n*** List of {people} in Primary School 'Python' ***"
+                print(printing)
+                for user in self.os_path_exists_database(database):
+                    print("\n\t\t", user[0], user[1], user[2])
+                print("*" * len(printing))
+                email = input(f"\nEnter the email address of the {person} whose account"
+                              " you want to edit:\t").strip()
+                while check_email(email):
+                    print("\n*** Try again. ***")
+                    email = input(f"\nEnter the email of the {person} whose account you want to edit:\t").strip()
+                
+                self.os_path_exists_student(students_database, email)
+                if self.os_path_exists_student(students_database, email) is False:
+                    print(f"\n*** A student with an email address '{email}' "
+                          f"does not exist in the database. ***")
+                    return
+                else:
+                    edited_information_list = []
+                    for user in self.os_path_exists_student(students_database, email):
+                        edited_information_list.append(user)
+                    print(f"\n****** USER INFORMATION ******\n\n\t\tFirst name: {edited_information_list[0]}"
+                          f"\n\t\tLast name: {edited_information_list[1]}\n\t\tE-mail address: {edited_information_list[2]}")
+                    print("*" * 30)
+                    print_edit_user_information()
+                    choice_1 = input("\nEnter a number from 1 to 5:\t")
+                    while choice_1 != "1" and choice_1 != "2" and choice_1 != "3" and choice_1 != "4"\
+                            and choice_1 != "5":
+                        print("\n*** Try again. ***")
+                        choice_1 = input("\nEnter a number from 1 to 5:\t")
+                    if choice_1 == "1":
+                        first_name = input("\nEnter new first name:\t").strip().capitalize()
+                        while check_name:
                             print("\n*** Try again. ***")
-                            email = input("\nEnter the email of the student whose account you want to edit:\t").strip()
-                            with open("students_database.csv", "r") as file_1:
-                                reader = csv.reader(file_1, delimiter="\t")
-                                temp_list = []
-                                for row in reader:
-                                    if row[2] == email:
-                                        temp_list.append(row[0])
-                                        temp_list.append(row[1])
-                                        temp_list.append(row[2])
-                                        temp_list.append(row[3])
-                                if not temp_list:
-                                    print(f"\n*** A student with an email address '{email}' "
-                                          f"does not exist in the database. ***")
-                                    return
-                                else:
-                                    edited_information_list = temp_list
-                                    print(f"\n****** USER INFORMATION ******\n\n\t\tFirst name: {temp_list[0]}"
-                                          f"\n\t\tLast name: {temp_list[1]}\n\t\tE-mail address: {temp_list[2]}")
-                                    print("*" * 30)
-                                    print_edit_user_information()
-                                    choice_1 = input("\nEnter a number from 1 to 5:\t")
-                                    while choice_1 != "1" and choice_1 != "2" and choice_1 != "3" and choice_1 != "4"\
-                                            and choice_1 != "5":
-                                        print("\n*** Try again. ***")
-                                        choice_1 = input("\nEnter a number from 1 to 5:\t")
-                                    if choice_1 == "1":
-                                        first_name = input("\nEnter new first name:\t").strip().capitalize()
-                                        while first_name.isspace() or first_name.isnumeric():
-                                            print("\n*** Try again. ***")
-                                            first_name = input("\nEnter new name:\t").strip().capitalize()
-                                        edited_information_list[0] = first_name
-                                        print("\n*** First name edited successfully. ***")
-                                    elif choice_1 == "2":
-                                        last_name = input("\nEnter new last name:\t").strip().capitalize()
-                                        while last_name.isspace() or last_name.isnumeric():
-                                            print("\n*** Try again. ***")
-                                            last_name = input("\nEnter new last name:\t").strip().capitalize()
-                                        edited_information_list[1] = last_name
-                                        print("\n*** Last name edited successfully. ***")
-                                    elif choice_1 == "3":
-                                        pass
+                            first_name = input("\nEnter new name:\t").strip().capitalize()
+                        edited_information_list[0] = first_name
+                        print("\n*** First name edited successfully. ***")
+                    elif choice_1 == "2":
+                        last_name = input("\nEnter new last name:\t").strip().capitalize()
+                        while check_name:
+                            print("\n*** Try again. ***")
+                            last_name = input("\nEnter new last name:\t").strip().capitalize()
+                        edited_information_list[1] = last_name
+                        print("\n*** Last name edited successfully. ***")
+                    elif choice_1 == "3":
+                        pass
 
 
                                     # groups = list()

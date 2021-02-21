@@ -8,8 +8,18 @@ from Registration_functions import check_name, check_language, check_email, os_p
 
 class School:
 # TODO: да помисля как да променя условията, които са ми if и else, да бъдат if, elif и else, за да нямам допълнителни условия в else.
-# TODO: да преговоря PANDAS и да намеря bar plot, typora
+# TODO: да преговоря PANDAS и да намеря bar plot, join функцията
 # TODO: когато свършим целия проект да променим структурата на въвеждането във файловете, като използваме речници и Pandas
+# num_list = [str(num) for num in range(1, 5)] # TODO: да преговоря циклите на един ред и речниците на един ред
+# работи с по-малко елементи; речник на един ред: {num: num for num in range(1, 5)} - ключът и стойността са
+# еднакви числа
+# {key: value for key, value in zip(range(1, 5), range(10, 15)} - работи, когато ключът и
+# стойността са с еднаква дължина на списъка. range(1, 5) ни е списъка с числа на ключовете, а range(10, 15) ни
+# е списъка с числа на стойностите.
+# създаване на списък от тупъли (с две променливи - v, v): [(v, v) for v in range(1, 5)]
+# стойностите на променливите са еднакви числа
+# TODO: да помисля как да направя речник от тупъли на един ред; да създам списък от обекти на един ред; речник
+#  със списъци, които съдържат други списъци; да преговоря join
 
     def os_path_exists_database(self, database):
         """
@@ -197,7 +207,7 @@ class School:
                             print("\n", "*" * len(a))
 
     def delete_group_name(self, name, new_name):
-# TODO: да се допише ако файлът съществува да му се промени и името - прехвърля се информацията от стария файл в файл с
+# TODO: да се допише ако файлът съществува да му се промени и името - прехвърля се информацията от стария файл във файл с
 # с новото име и после се изтрива стария файл;  след това се изтрива името на стария файл от базата от данни и се
 # добавя новото име
         groups = list()
@@ -301,9 +311,9 @@ class School:
                     print("\n")
                     print("*" * 63)
                     if user == "student":
-                        self.deny_student(email)
+                        self.deny_user(email, "student")
                     elif user == "teacher":
-                        self.deny_teacher(email)
+                        self.deny_user(email, "teacher")
                 else:
                     return
 
@@ -329,34 +339,16 @@ class School:
                 return temp_list
 # TODO: да променя навсякъде където няма фор цикъл и въвеждам индекси в базата данни, трябва да записвам директно списъка
 # (променливата без индекси). Да използвам само една функция за записване на файловете, защото вече нямам индекси
-    def write_in_group_database(self, database, file_list):
+# Направено е с тази функция:
+    def write_in_database(self, database, temp_list):
         """
-        Add student's information in group database.
-        :param database: the name of the group database
-        :param file_list: list of student's information
-        """
-        with open(database, "a") as file:
-            writer = csv.writer(file, delimiter="\t")
-            writer.writerow([
-                file_list[0],
-                file_list[1],
-                file_list[2]
-            ])
-
-    def write_in_database(self, database, user_list):
-        """
-        Add user information in the database.
+        Add information in the database.
         :param database: the name of the database
-        :param user_list: list of user's information
+        :param temp_list: list of information
         """
         with open(database, "a") as file:
             writer = csv.writer(file, delimiter="\t")
-            writer.writerow([
-                user_list[0],
-                user_list[1],
-                user_list[2],
-                user_list[3]
-            ])
+            writer.writerow(temp_list)
 
     def overwriting_the_database(self, database, user):
         """
@@ -407,12 +399,12 @@ class School:
             group_database = f"{group}.csv"
             if os.path.exists(group_database):
                 self.find_group(group)
-                self.write_in_group_database(group_database, temp_list)
+                self.write_in_database(group_database, temp_list)
                 print(f"\n*** {temp_list[0]} {temp_list[1]} was added successfully in {group}. ****")
             else:
                 self.find_group(group)
                 os_path_does_not_exists(group_database, list_of_columns_2)
-                self.write_in_group_database(group_database, temp_list)
+                self.write_in_database(group_database, temp_list)
                 print(f"\n*** {temp_list[0]} {temp_list[1]} was added successfully in {group}. ****")
 
     def find_email(self, database, email):
@@ -436,44 +428,19 @@ class School:
             else:
                 return temp_list
 
-    def deny_student(self, email):
+# НОВА ФУНКЦИЯ:
+    def add_in_list(self, database):
         """
-        Rejection of student registration. The information about the student is transferred to the user database.
-        param email: student's e-mail address
-        """
-        database_approval = "students_database_for_approval.csv"
-        database_users = "users_database.csv"
-        columns = ["First name", "Last name", "E-mail address", "Password"]
-        student_list = []
-        if os.path.exists(database_approval):
-            self.find_email(database_approval, email)
-            if self.find_email(database_approval, email) is False:
-                print(f"\n*** A student with an email address '{email}' does not exist in the database. ***")
-                return
-            else:
-                if not os.path.exists(database_users):
-                    os_path_does_not_exists(database_users, columns)
-                if os.path.exists(database_users):
-                    for user in self.find_email(database_approval, email):
-                        student_list.append(user)
-                    self.write_in_database(database_users, student_list)
-                self.overwriting_the_database(database_approval, student_list)
-                print(f"\n*** {student_list[0]} {student_list[1]}'s registration was rejected and added "
-                      f"to users database. ***")
-        else:
-            print("\n*** There are no registration requests yet. ***")
-
-    def write_in_teacher_database(self, database, mode, info_list):
-        """
-        Writing teacher's information in the database.
+        Open file and read it. Making a list from row 4.
         :param database: the name of the database
-        :param mode: mode for reading or writhing
-        :param info_list: teacher's information
+        return: list
         """
-        with open(database, mode) as g_file:
-            writer = csv.writer(g_file, delimiter="\t")
-            # for teacher in info_list:
-            writer.writerow(info_list)
+        with open(database, "r") as file:
+            reader = csv.reader(file, delimiter="\t")
+            all_classes = []
+            for row in reader:
+                all_classes.append(row[4])
+            return all_classes
 
     def find_teacher(self, email):
         """
@@ -484,16 +451,6 @@ class School:
         database = "teachers_database.csv"
         columns = ["First name", "Last name", "E-mail address", "Password", "Class", "Birth", "Work"]
         temp_list = []
-        # num_list = [str(num) for num in range(1, 5)] # TODO: да преговоря циклите на един ред и речниците на един ред
-        # работи с по-малко елементи; речник на един ред: {num: num for num in range(1, 5)} - ключът и стойността са
-        # еднакви числа
-        # {key: value for key, value in zip(range(1, 5), range(10, 15)} - работи, когато ключът и
-        # стойността са с еднаква дължина на списъка. range(1, 5) ни е списъка с числа на ключовете, а range(10, 15) ни
-        # е списъка с числа на стойностите.
-        # създаване на списък от тупъли (с две променливи - v, v): [(v, v) for v in range(1, 5)]
-        # стойностите на променливите са еднакви числа
-        # TODO: да помисля как да направя речник от тупъли на един ред; да създам списък от обекти на един ред; речник
-        #  със списъци, които съдържат други списъци; да преговоря join
         if os.path.exists(database_for_approval):
             with open(database_for_approval, "r") as a_file:
                 reader = csv.reader(a_file, delimiter="\t")
@@ -528,12 +485,8 @@ class School:
                             while group.isspace() or group.isnumeric():
                                 print("\n*** Try again. ***")
                                 group = input("\nEnter the teacher's class name?:\t").strip().title()
-                            with open(database, "r") as c_file:
-                                reader = csv.reader(c_file, delimiter='\t')
-                                classes = []
-                                for row in reader:
-                                    classes.append(row[4])
-                            if group in classes:
+                            self.add_in_list(database)
+                            if group in self.add_in_list(database):
                                 print(f"\n*** {group} already has a registered teacher. ***"
                                       f"\n*** You can add another class later in User account options. ***")
                             else:
@@ -544,12 +497,7 @@ class School:
                             str_num = ["first", "second", "third", "fourth"]
                             new_class_list = []
                             teacher_list = []
-                            # TODO: да направя функция, защото се повтаря с ред №528
-                            with open(database, "r") as d_file:
-                                reader = csv.reader(d_file, delimiter="\t")
-                                all_classes = []
-                                for row in reader:
-                                    all_classes.append(row[4])
+                            self.add_in_list(database)
                             for number in range(num_1):
                                 teacher_class = input(f"\nEnter {str_num[number]} class name:\t").strip().title()
                                 while teacher_class.isspace() or teacher_class.isnumeric():
@@ -557,9 +505,9 @@ class School:
                                     teacher_class = input(f"\nEnter {str_num[number]} class name:\t").strip().title()
                                 new_class_list.append(teacher_class)
                                 result = []
-                                for num_class in range(len(all_classes)):
+                                for num_class in range(len(self.add_in_list(database))):
                                     for num_group in range(len(new_class_list)):
-                                        if new_class_list[num_group] in all_classes[num_class]:
+                                        if new_class_list[num_group] in self.add_in_list(database)[num_class]:
                                             result.append(new_class_list[num_group])
                                 if result:
                                     print(f"\n*** {teacher_class} already has a registered teacher. ***")
@@ -574,54 +522,124 @@ class School:
                     else:
                         print("\n*** You can add the name of the class later in User accounts options. ***")
                     if os.path.exists(database):
-                        self.write_in_teacher_database(database, "a", temp_list)
+                        self.write_in_database(database, temp_list)
                         print(f"\n*** {temp_list[0]} {temp_list[1]}'s registration was "
                               f"successfully approved. ***")
                         self.overwriting_the_database(database_for_approval, temp_list)
 
-    def deny_teacher(self, email):
-        # TODO: да използвам overwriting_the_database
-        if os.path.exists("teachers_database_for_approval.csv"):
-            with open("teachers_database_for_approval.csv", "r") as file:
-                reader = csv.reader(file, delimiter="\t")
-                temp_list = []
-                for row in reader:
-                    if row[2] == email:
-                        temp_list.append(row[0])
-                        temp_list.append(row[1])
-                        temp_list.append(row[2])
-                        temp_list.append(row[3])
-                if not temp_list:
-                    print(f"\n*** A teacher with an email address '{email}' does not exist in the database. ***")
-                    return
-                else:
-                    if not os.path.exists("users_database.csv"):
-                        with open("users_database.csv", "w") as file_1:
-                            writer = csv.writer(file_1, delimiter="\t")
-                            writer.writerow(["First name", "Last name", "E-mail address", "Password"])
-                    if os.path.exists("users_database.csv"):
-                        with open("users_database.csv", "a") as file_2:
-                            writer = csv.writer(file_2, delimiter="\t")
-                            writer.writerow([
-                                temp_list[0],
-                                temp_list[1],
-                                temp_list[2],
-                                temp_list[3]
-                            ])
-                    with open("teachers_database_for_approval.csv", "r") as file_3:
-                        teachers = []
-                        reader = csv.reader(file_3, delimiter="\t")
-                        for row in reader:
-                            if row[2] != temp_list[2]:
-                                teachers.append(row)
-                    with open("teachers_database_for_approval.csv", "w") as file_4:
-                        writer = csv.writer(file_4, delimiter="\t")
-                        for teacher in teachers:
-                            writer.writerow(teacher)
-                    print(f"\n*** {temp_list[0]} {temp_list[1]}'s registration was rejected and added "
-                          f"to users database. ***")
+# НОВА ФУНКЦИЯ, КОЯТО СЪБИРА deny_student и deny_teacher в едно:
+    def deny_user(self, email, user):
+        """
+        Rejection of user registration. The information about the user is transferred to the user database.
+        :param email: user's e-mail address
+        :param user: teacher or student
+        """
+        database_approval = None
+        user_database = "users_database.csv"
+        columns = ["First name", "Last name", "E-mail address", "Password"]
+        temp_list = []
+        person = None
+        if user == "student":
+            database_approval = "students_database_for_approval.csv"
+            person = "student"
+        elif user == "teacher":
+            database_approval = "teachers_database_for_approval.csv"
+            person = "teacher"
+        if os.path.exists(database_approval):
+            self.find_email(database_approval, email)
+            if self.find_email(database_approval, email) is False:
+                print(f"\n*** A {person} with an email address '{email}' does not exist in the database. ***")
+                return
+            else:
+                if not os.path.exists(user_database):
+                    os_path_does_not_exists(user_database, columns)
+                if os.path.exists(user_database):
+                    for user in self.find_email(database_approval, email):
+                        temp_list.append(user)
+                    self.write_in_database(user_database, temp_list)
+                self.overwriting_the_database(database_approval, temp_list)
+                print(f"\n*** {temp_list[0]} {temp_list[1]}'s registration was rejected and added "
+                      f"to users database. ***")
         else:
             print("\n*** There are no registration requests yet. ***")
+
+    # def deny_student(self, email):
+    #    """
+    #    Rejection of student registration. The information about the student is transferred to the user database.
+    #    param email: student's e-mail address
+    #    """
+    #    database_approval = "students_database_for_approval.csv"
+    #    database_users = "users_database.csv"
+    #    columns = ["First name", "Last name", "E-mail address", "Password"]
+    #    student_list = []
+    #    if os.path.exists(database_approval):
+    #        self.find_email(database_approval, email)
+    #        if self.find_email(database_approval, email) is False:
+    #            print(f"\n*** A student with an email address '{email}' does not exist in the database. ***")
+    #            return
+    #        else:
+    #            if not os.path.exists(database_users):
+    #                os_path_does_not_exists(database_users, columns)
+    #            if os.path.exists(database_users):
+    #                for user in self.find_email(database_approval, email):
+    #                    student_list.append(user)
+    #                self.write_in_database(database_users, student_list)
+    #            self.overwriting_the_database(database_approval, student_list)
+    #            print(f"\n*** {student_list[0]} {student_list[1]}'s registration was rejected and added "
+    #                  f"to users database. ***")
+    #    else:
+    #        print("\n*** There are no registration requests yet. ***")
+
+    # def deny_teacher(self, email):
+    #     """
+    #     Rejection of teacher registration. The information about the teacher is transferred to the user database.
+    #     :param email: teacher's e-mail address
+    #     """
+    #     database_approval = "teachers_database_for_approval.csv"
+    #     database_users = "users_database.csv"
+    #     columns = ["First name", "Last name", "E-mail address", "Password"]
+    #     teacher_list = []
+    #     if os.path.exists(database_approval):
+    #         with open(database_approval, "r") as file:
+    #             reader = csv.reader(file, delimiter="\t")
+    #             temp_list = []
+    #             for row in reader:
+    #                 if row[2] == email:
+    #                     temp_list.append(row[0])
+    #                     temp_list.append(row[1])
+    #                     temp_list.append(row[2])
+    #                     temp_list.append(row[3])
+    #             if not temp_list:
+    #                 print(f"\n*** A teacher with an email address '{email}' does not exist in the database. ***")
+    #                 return
+    #             else:
+    #                 if not os.path.exists(database_users):
+    #                     with open(database_users, "w") as file_1:
+    #                         writer = csv.writer(file_1, delimiter="\t")
+    #                         writer.writerow(columns)
+    #                 if os.path.exists(database_users):
+    #                     with open(database_users, "a") as file_2:
+    #                         writer = csv.writer(file_2, delimiter="\t")
+    #                         writer.writerow([
+    #                             temp_list[0],
+    #                             temp_list[1],
+    #                             temp_list[2],
+    #                             temp_list[3]
+    #                         ])
+    #                 with open(database_approval, "r") as file_3:
+    #                     teachers = []
+    #                     reader = csv.reader(file_3, delimiter="\t")
+    #                     for row in reader:
+    #                         if row[2] != temp_list[2]:
+    #                             teachers.append(row)
+    #                 with open(database_approval, "w") as file_4:
+    #                     writer = csv.writer(file_4, delimiter="\t")
+    #                     for teacher in teachers:
+    #                         writer.writerow(teacher)
+    #                 print(f"\n*** {temp_list[0]} {temp_list[1]}'s registration was rejected and added "
+    #                       f"to users database. ***")
+    #     else:
+    #         print("\n*** There are no registration requests yet. ***")
 
     def show_users_database(self):
         if not os.path.exists("users_database.csv"):
@@ -741,7 +759,7 @@ class School:
 # имената на файловете трябва да са идентични с имената на групите. След като администраторът създаде нова група
 # трябва отдолу да напиша да се създава и файл със същото име, за да може да се принтират учениците от
 # show_groups_database функцията
-# няма да има втори файл за учениците, които са одобрени, а ще се местят директно от списъка за одобрение въw файла на групата
+# няма да има втори файл за учениците, които са одобрени, а ще се местят директно от списъка за одобрение във файла на групата
 
 
 

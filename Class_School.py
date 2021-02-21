@@ -673,8 +673,6 @@ class School:
         while choice != "1" and choice != "2" and choice != "3" and choice != "4":
             print("\n*** Try again. ***")
             choice = input("\nEnter a number from 1 to 4:\t")
-            # "\n\n# 1: Edit student's account\n\n# 2: Edit teacher's account"
-            # "\n\n# 3: Edit user's account\n\n# 4: Quit"
         if choice == "1":
             database = students_database
             people = "students"
@@ -706,7 +704,9 @@ class School:
                 while check_email(email):
                     print("\n*** Try again. ***")
                     email = input(f"\nEnter the email of the {person} whose account you want to edit:\t").strip()
-                
+
+
+
                 self.os_path_exists_student(students_database, email)
                 if self.os_path_exists_student(students_database, email) is False:
                     print(f"\n*** A student with an email address '{email}' "

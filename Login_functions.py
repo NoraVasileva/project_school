@@ -26,7 +26,7 @@ def login():
         else:
             return
 
-
+# TODO: да направя една обща функция за student_login и teacher_login
 def student_login():
     """
     Login form for students. Entering email address and password.
@@ -39,7 +39,7 @@ def student_login():
         print("\n*** This e-mail address is not recognized. ***")
         email = input("\nEnter another e-mail address:\t").strip()
     password = input("\nEnter a password (enter at least six characters):\t").strip()
-    while check_password:
+    while check_password(password):
         print("\n*** Your password is incorrect. Try again. ***")
         password = input("\nEnter a password (enter at least six characters):\t").strip()
     print("*" * len(pr))

@@ -273,8 +273,8 @@ def check_name(name, min_length_name, max_length_name):
     """
     Checking name length, if the name contains numbers and if the name is not empty.
     :param name: student's name for registration
-    :param min_length_name: minimum name length
-    :param max_length_name: maximum name length
+    :param min_length_name: minimum name length - 2 for first name; 5 for last name
+    :param max_length_name: maximum name length - 20
     :return: Boolean
     """
     return name.isspace() or name.isalpha() is False or len(name) > max_length_name or len(name) < min_length_name

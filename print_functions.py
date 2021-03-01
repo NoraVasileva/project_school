@@ -133,14 +133,14 @@ def print_user_options():
           "\n\n# 1: Show all teachers\n\n# 2: Quit"
           "\n*************************************************")
 
-# НОВА ФУНКЦИЯ:
+
 def print_reg_1():
     """
     Printing information on existing registration.
     """
     print("\n*** You already have a registration! Please login. ***")
 
-# НОВА ФУНКЦИЯ:
+
 def print_reg_2():
     """
     Printing of information regarding the requested registration.
@@ -150,7 +150,7 @@ def print_reg_2():
           "you will have user status only ***")
     print("\n*** Use login option. ***")
 
-# НОВА ФУНКЦИЯ:
+
 def print_reg_3():
     """
     Printing of information about new registration.
@@ -160,7 +160,7 @@ def print_reg_3():
           "you will have user status only ***")
     print("\n*** You can now login. ***")
 
-# НОВА ФУНКЦИЯ:
+
 def print_reg_4():
     """
     Printing options for approving or rejecting registrations.
@@ -171,16 +171,56 @@ def print_reg_4():
           "\n\n# 1: Approve\n\n# 2: Reject\n\n# 3: Quit"
           "\n\n*********************************************************")
 
-# НОВА ФУНКЦИЯ:
+
 def print_no_students():
     """
     Printing information that there are no students.
     """
     print("\n*** There are no students to show yet. ***")
 
-# НОВА ФУНКЦИЯ:
+
 def print_no_teachers():
     """
     Printing information that there are no teachers.
     """
     print("\n*** There are no teachers to show yet. ***")
+
+
+def print_teacher_information():
+    """
+    Printing menu with options about editing teachers's information for the administrator.
+    1: Edit first name; 2: Edit last name; 3: Edit e-mail address; 4: Edit password; 5: Edit study classes
+    6: Edit birth"; 7: Edit work experience; 8: Quit"
+    """
+    print("\n***************** ACCOUNT EDITING ****************"
+          "\n\nChoose a number from 1 to 8 from the below options:"
+          "\n\n# 1: Edit first name\n\n# 2: Edit last name"
+          "\n\n# 3: Edit e-mail address\n\n# 4: Edit password"
+          "\n\n# 5: Edit study classes\n\n# 6: Edit birth"
+          "\n\n# 7: Edit work experience\n\n# 8: Quit"
+          "\n\n**************************************************")
+
+
+def print_edit_info():
+    """
+    Printing menu with options about editing user's information for the administrator.
+    1: Edit students information; 2: Edit teachers information; 3: Edit users information; 4: Quit"
+    """
+    print("\n***************** ACCOUNT EDITING ****************"
+          "\n\nChoose a number from 1 to 4 from the below options:"
+          "\n\n# 1: Edit students information\n\n# 2: Edit teachers information"
+          "\n\n# 3: Edit users information\n\n# 4: Quit"
+          "\n\n**************************************")
+
+
+def print_delete_account():
+    """
+    Printing menu with options about deleting user's information for the administrator.
+    1: Delete students information; 2: Delete teachers information; 3: Delete users information; 4: Quit"
+    """
+    print("\n***************** ACCOUNT EDITING ****************"
+          "\n\nChoose a number from 1 to 4 from the below options:"
+          "\n\n# 1: Delete students information\n\n# 2: Delete teachers information"
+          "\n\n# 3: Delete users information\n\n# 4: Quit"
+          "\n\n**************************************")
+

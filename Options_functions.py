@@ -1,6 +1,8 @@
 from Class_School import School
+from Registration_functions import check_email
 from print_functions import print_teacher_options, print_admin_options, print_users_management, \
-    print_registrations, print_user_options, print_user_accounts, print_show_users
+    print_registrations, print_user_options, print_user_accounts, print_show_users, print_edit_info, \
+    print_delete_account
 
 
 def teacher_options():
@@ -67,7 +69,11 @@ def admin_option_2():
 
 
 def admin_options_3():
+    admin = School()
     print_user_accounts()
+    students_database = "students_database.csv"
+    teachers_database = "teachers_database.csv"
+    users_database = "users_database.csv"
     choice_3 = input("\nEnter a number from 1 to 4:\t")
     while choice_3 != "1" and choice_3 != "2" and choice_3 != "3" and choice_3 != "4":
         print("\n*** Try again. ***")
@@ -75,11 +81,45 @@ def admin_options_3():
     if choice_3 == "1":
         admin_options_4()
     elif choice_3 == "2":
-        admin = School()
-        admin.edit_user()
+        database, email = admin.edit_user()
+        if database == students_database:
+            admin.edit_student_or_user(students_database, "student", email)
+        elif database == users_database:
+            admin.edit_student_or_user(users_database, "user", email)
+        elif database == teachers_database:
+            admin.edit_teacher(teachers_database, email)
+        else:
+            print("\n*** Something went wrong. ***")
     elif choice_3 == "3":
-# TODO: да се довърши
-        pass
+        admin = School()
+        print_delete_account()
+        choice = input("\nEnter a number from 1 to 4:\t")
+        if choice != "1" and choice != "2" and choice != "3" and choice != "4":
+            print("\n*** Try again. ***")
+            choice = input("\nEnter a number from 1 to 4:\t")
+        if choice == "4":
+            return
+        elif choice == "1":
+            admin.show_students_database()
+            email = input("\nEnter student's e-mail addrres:\t")
+            while check_email(email):
+                print("\n*** Try again. ***")
+                email = input("\nEnter student's e-mail addrres:\t")
+            admin.delete_account(email, "student")
+        elif choice == "2":
+            admin.show_teachers_database()
+            email = input("\nEnter teacher's e-mail addrres:\t")
+            while check_email(email):
+                print("\n*** Try again. ***")
+                email = input("\nEnter teacher's e-mail addrres:\t")
+            admin.delete_account(email, "teacher")
+        elif choice == "3":
+            admin.show_users_database()
+            email = input("\nEnter user's e-mail addrres:\t")
+            while check_email(email):
+                print("\n*** Try again. ***")
+                email = input("\nEnter user's e-mail addrres:\t")
+            admin.delete_account(email, "user")
     else:
         return
 

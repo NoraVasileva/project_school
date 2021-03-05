@@ -250,23 +250,11 @@ def os_path_does_not_exists(database, list_of_columns):
     """
     Enter the column names in the student database.
     :param database: the name of the database
+    :param list_of_columns: the names of the columns
     """
     with open(database, "w") as new_file:
         writer = csv.writer(new_file, delimiter="\t")
         writer.writerow(list_of_columns)
-
-
-def os_path_does_not_exists_group(group):
-    """
-    Add a new group to the database.
-    :param group: the name of the group
-    """
-    with open("groups_database.csv", "a") as file:
-        # TODO: да попитам Милена, защо ми дава грешка на закоментирания ред
-        # writer = csv.writer(file, newline="")
-        writer = csv.writer(file, delimiter="\t")
-        writer.writerow([group])
-        print(f"\n*** The {group} was created successfully. ***")
 
 
 def check_name(name, min_length_name, max_length_name):

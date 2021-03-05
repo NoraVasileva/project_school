@@ -2,9 +2,10 @@ import csv
 import os
 from copy import deepcopy
 
+from Groups import find_group, show_only_groups
 from print_functions import print_no_students, print_no_teachers, print_reg_4, print_teacher_information
 from print_functions import print_edit_user, print_edit_user_information
-from Registration_functions import check_name, check_language, check_email, os_path_does_not_exists_group, \
+from Registration_functions import check_name, check_language, check_email, \
     os_path_does_not_exists, date_check
 import datetime
 
@@ -122,132 +123,6 @@ class School:
                     else:
                         print("Something went wrong. Contact the administrator.")
 
-    def os_path_exists_group(self, group):
-        """
-        Check if the group exists in the database.
-        :param group: the name of the group
-        :return: Boolean
-        """
-        find_group = False
-        with open("groups_database.csv", "r") as file:
-            list_groups = file.readlines()
-            for row in list_groups:
-                if group in row:
-                    find_group = True
-        return find_group
-
-    def find_group(self, group):
-        """
-        Check if the group exists in the database. If the group does not exist, it is entered in the database.
-        :param group: the name of the group
-        """
-        if not os.path.exists("groups_database.csv"):
-            os_path_does_not_exists_group(group)
-        elif self.os_path_exists_group(group) is False:
-            os_path_does_not_exists_group(group)
-        else:
-            print(f"\n*** The {group} already exists. ***")
-
-    def show_only_groups(self):
-        """
-        Display groups in the database.
-        """
-        if not os.path.exists("groups_database.csv"):
-            print(f"\n*** No study classes created yet. ***")
-        elif os.path.exists("groups_database.csv"):
-            with open("groups_database.csv", "r") as file:
-                reader = csv.reader(file, delimiter="\t")
-                print("\n******* LIST OF STUDY CLASSES *******")
-                print("\n")
-                for row in reader:
-                    len_row = len(row)
-                    for row_1 in range(len_row):
-                        print("\t\t\t", row[row_1], end="")
-                        print('\n')
-                print("\n")
-                print("*" * 37)
-
-    def show_groups_database_with_students(self):
-        if not os.path.exists("groups_database.csv"):
-            print(f"\n*** No study classes created yet. ***")
-        else:
-            with open("groups_database.csv", "r") as file:
-                reader = csv.reader(file, delimiter="\t")
-                print("\n******* LIST OF STUDY CLASSES *******")
-                for row in reader:
-                    print(f"\n\t\t{row[0]}")
-                print("\n")
-                print("*" * 37)
-            print("\n*** Do you want to see the list of students in a particular study class? ***")
-            choice = input("\nEnter Yes or No:\t").capitalize().strip()
-            while choice != "Yes" and choice != "No":
-                print("\n*** We don't have this option. Try again. ***")
-                choice = input("\nEnter Yes or No: ").capitalize().strip()
-            if choice == "No":
-                return
-            else:
-                new_choice = input("\nEnter study class name: ").title().strip()
-                while new_choice.isspace() and new_choice.isalpha() is False:
-                    print("\n*** Try again. ***")
-                    new_choice = input("\nEnter study class name: ").title().strip()
-                with open("groups_database.csv", "r") as file_1:
-                    reader = csv.reader(file_1, delimiter="\t")
-                    temp_list = []
-                    for row in reader:
-                        if new_choice == row[0]:
-                            temp_list.append(new_choice)
-                    if not temp_list:
-                        print(f"\n*** {new_choice} does not exist. ***")
-                    elif len(temp_list) == 1:
-                        csv_name = f"{row[0]}.csv"
-                        group_name = new_choice.upper()
-                        with open(csv_name, "r") as file_2:
-                            reader_1 = csv.reader(file_2, delimiter="\t")
-                            a = f"\n************** LIST OF {group_name} **************"
-                            print(a)
-                            for row_1 in reader_1:
-                                print(f"\n\t\t{row_1[0]} {row_1[1]}")
-                            print("\n", "*" * len(a))
-
-    def delete_group_name(self, name, new_name):
-# TODO: да се допише ако файлът съществува да му се промени и името - прехвърля се информацията от стария файл във файл с
-# с новото име и после се изтрива стария файл;  след това се изтрива името на стария файл от базата от данни и се
-# добавя новото име
-        groups = list()
-        with open("groups_database.csv", "r") as f:
-            reader = csv.reader(f)
-            for row in reader:
-                groups.append(row)
-                for gr in row:
-                    if gr == name:
-                        groups.remove(row)
-        groups.append(new_name)
-        with open("groups_database.csv", "a") as file:
-            writer = csv.writer(file)
-            for gr in groups:
-                writer.writerow(gr)
-        print(f"\n*** {name} was successfully edited to {new_name}. ***")
-
-    def delete_group(self, name, name_csv):
-        if os.path.exists(f"{name_csv}"):
-            os.remove(name_csv)
-            groups = list()
-            with open("groups_database.csv", "r") as f:
-                reader = csv.reader(f)
-                for row in reader:
-                    groups.append(row)
-                    for gr in row:
-                        if gr == name:
-                            groups.remove(row)
-            with open("groups_database.csv", "a") as file:
-                writer = csv.writer(file)
-                for gr in groups:
-                    writer.writerow(gr)
-            print(f"\n**** {name} deleted successfully. ***")
-
-        else:
-            print(f"\n*** {name} do not exists. ***")
-
     def delete_account(self, email, user_name):
         """
         Delete user's account from the database.
@@ -277,6 +152,12 @@ class School:
             self.find_account(users_database, email)
 
     def find_account(self, database, email):
+        """
+        Check if the database exists and have a registrations.
+        Checks if the email address exists and deletes the user from the database.
+        :param database: the name of the database
+        :param email: user's e-mail address
+        """
         os_path_exists_database = self.os_path_exists_database(database)
         if os_path_exists_database is False:
             print("\n*** There are no registrations yet. ***")
@@ -429,19 +310,18 @@ class School:
                 self.write_in_database(students_database, temp_list)
                 print(f"\n*** {temp_list[0]} {temp_list[1]}'s registration was successfully approved. ***")
                 self.overwriting_the_database(database_for_approval, temp_list)
-            student = School()
-            student.show_only_groups()
+            show_only_groups()
             group = input("\nIn which class you want to add the student? Enter class name:\t").title()
             while group == "":
                 print("*** Try again. ***")
                 group = input("\nIn which class you want to add the student? Enter class name:\t").title()
             group_database = f"{group}.csv"
             if os.path.exists(group_database):
-                self.find_group(group)
+                find_group(group)
                 self.write_in_database(group_database, temp_list)
                 print(f"\n*** {temp_list[0]} {temp_list[1]} was added successfully in {group}. ****")
             else:
-                self.find_group(group)
+                find_group(group)
                 os_path_does_not_exists(group_database, list_of_columns_2)
                 self.write_in_database(group_database, temp_list)
                 print(f"\n*** {temp_list[0]} {temp_list[1]} was added successfully in {group}. ****")

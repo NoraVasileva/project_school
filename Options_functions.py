@@ -1,4 +1,5 @@
 from Class_School import School
+from Groups import show_groups_database_with_students, groups_admin_menu
 from Registration_functions import check_email
 from print_functions import print_teacher_options, print_admin_options, print_users_management, \
     print_registrations, print_user_options, print_user_accounts, print_show_users, print_edit_info, \
@@ -13,13 +14,12 @@ def teacher_options():
             print_teacher_options()
             choice = input("\nEnter a number from 1 to 3:\t").strip()
         if choice == "3":
-            break
+            return
         elif choice == "2":
             teacher = School()
             teacher.show_teachers_database()
         else:
-            teacher = School()
-            teacher.show_groups_database_with_students()
+            show_groups_database_with_students()
 
 
 def admin_options():
@@ -34,7 +34,11 @@ def admin_options():
             choice = input("\nEnter a number from 1 to 4:\t").strip()
         if choice == "1":
             admin_options_1()
-        else:
+        elif choice == "2":
+            groups_admin_menu()
+        elif choice == "3":
+            pass
+        elif choice == "4":
             return
 
 

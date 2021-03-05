@@ -224,3 +224,15 @@ def print_delete_account():
           "\n\n# 3: Delete users information\n\n# 4: Quit"
           "\n\n**************************************")
 
+def print_class_menu():
+    """
+    Printing menu with options about study classes for the administrator.
+    1: Show all study classes; 2: Create new study class; 3: Edit study class name; 4: Delete study class; 5: Quit"
+    """
+    print("\n*********** INFORMATION ABOUT STUDY CLASSES *********"
+          "\n"
+          "\nChoose a number from 1 to 5 from the below options:"
+          "\n"
+          "\n# 1: Show all study classes\n\n# 2: Create new study class\n\n# 3: Edit study class name"
+          "\n\n# 4: Delete study class\n\n# 5: Quit"
+          "\n*****************************************************")

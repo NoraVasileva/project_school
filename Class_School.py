@@ -446,38 +446,41 @@ class School:
                         self.overwriting_the_database(database_for_approval, temp_list)
 
     def deny_user(self, email, user):
-        # TODO: да се сложат променливите в речник, както направихме с edit_user
+        # TODO: да се сложат променливите в речник, както направихме с edit_user - Направено е.
         """
         Rejection of user registration. The information about the user is transferred to the user database.
         :param email: user's e-mail address
         :param user: teacher or student
         """
-        database_approval = None
-        user_database = "users_database.csv"
-        columns = ["First name", "Last name", "E-mail address", "Password"]
-        temp_list = []
-        person = None
+        user_terms = {
+            "database_approval": None,
+            "user_database": "users_database.csv",
+            "columns": ["First name", "Last name", "E-mail address", "Password"],
+            "temp_list": [],
+            "person": None
+        }
         if user == "student":
-            database_approval = "students_database_for_approval.csv"
-            person = "student"
+            user_terms["database_approval"] = "students_database_for_approval.csv"
+            user_terms["person"] = "student"
         elif user == "teacher":
-            database_approval = "teachers_database_for_approval.csv"
-            person = "teacher"
-        if os.path.exists(database_approval):
-            self.find_email(database_approval, email)
-            if self.find_email(database_approval, email) is False:
-                print(f"\n*** A {person} with an email address '{email}' does not exist in the database. ***")
+            user_terms["database_approval"] = "teachers_database_for_approval.csv"
+            user_terms["person"] = "teacher"
+        if os.path.exists(user_terms["database_approval"]):
+            self.find_email(user_terms["database_approval"], email)
+            if self.find_email(user_terms["database_approval"], email) is False:
+                print(f'\n*** A {user_terms["person"]} with an email address "{email}" does not exist in the '
+                      f'database. ***')
                 return
             else:
-                if not os.path.exists(user_database):
-                    os_path_does_not_exists(user_database, columns)
-                if os.path.exists(user_database):
-                    for user in self.find_email(database_approval, email):
-                        temp_list.append(user)
-                    self.write_in_database(user_database, temp_list)
-                self.overwriting_the_database(database_approval, temp_list)
-                print(f"\n*** {temp_list[0]} {temp_list[1]}'s registration was rejected and added "
-                      f"to users database. ***")
+                if not os.path.exists(user_terms["user_database"]):
+                    os_path_does_not_exists(user_terms["user_database"], user_terms["columns"])
+                if os.path.exists(user_terms["user_database"]):
+                    for user in self.find_email(user_terms["database_approval"], email):
+                        user_terms["temp_list"].append(user)
+                    self.write_in_database(user_terms["user_database"], user_terms["temp_list"])
+                self.overwriting_the_database(user_terms["database_approval"], user_terms["temp_list"])
+                print(f"\n*** {user_terms['temp_list'][0]} {user_terms['temp_list'][1]}'s registration was rejected"
+                      f" and added to users database. ***")
         else:
             print("\n*** There are no registration requests yet. ***")
 
@@ -607,7 +610,6 @@ class School:
                 password = input("\nEnter new password: \t")
             edited_information_list[3] = password
             print("\n*** Password edited successfully. ***")
-        # TODO: Довършено е.
         if user_name == "student":
             self.overwriting_the_database(students_database, original_info_list)
             self.write_in_database(students_database, edited_information_list)
@@ -617,7 +619,6 @@ class School:
         elif choice_1 == "5":
             return
 
-        # TODO: Довършено е.
     def edit_teacher(self, database, email):
         """
         Editing teacher's information. Show menu with options for the administrator.
@@ -712,12 +713,6 @@ class School:
         self.overwriting_the_database(teachers_database, original_info_list)
         self.write_in_database(teachers_database, edited_information_list)
 
-
-
-# имената на файловете трябва да са идентични с имената на групите. След като администраторът създаде нова група
-# трябва отдолу да напиша да се създава и файл със същото име, за да може да се принтират учениците от
-# show_groups_database функцията
-# няма да има втори файл за учениците, които са одобрени, а ще се местят директно от списъка за одобрение във файла на групата
 
 
 

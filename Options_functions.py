@@ -1,9 +1,14 @@
+import csv
+import os
+import matplotlib.pyplot as plt
+import datetime
+
 from Class_School import School
 from Groups import show_groups_database_with_students, groups_admin_menu
 from Registration_functions import check_email
 from print_functions import print_teacher_options, print_admin_options, print_users_management, \
-    print_registrations, print_user_options, print_user_accounts, print_show_users, print_edit_info, \
-    print_delete_account
+    print_registrations, print_user_options, print_user_accounts, print_show_users, print_delete_account, \
+    school_information
 
 
 def teacher_options():
@@ -24,8 +29,6 @@ def teacher_options():
 
 def admin_options():
 # TODO: да се поправи цикълът, защото не ме връща на предишните менюта като натиксам quit
-
-# TODO: да се довършат всички опции
     while True:
         print_admin_options()
         choice = input("\nEnter a number from 1 to 4:\t").strip()
@@ -37,7 +40,7 @@ def admin_options():
         elif choice == "2":
             groups_admin_menu()
         elif choice == "3":
-            pass
+            admin_options_5()
         elif choice == "4":
             return
 
@@ -144,6 +147,68 @@ def admin_options_4():
         users = School()
         users.show_teachers_database()
     else:
+        return
+
+# TODO: да се довърши
+def admin_options_5():
+    school_information()
+    choice = input("\nEnter a number from 1 to 3:\t")
+    while choice != "1" and choice != "2" and choice != "3":
+        print("\n*** Try again. ***")
+        choice = input("\nEnter a number from 1 to 3:\t")
+    if choice == "1":
+        database = "groups_database.csv"
+        if not os.path.exists(database):
+            print(f"\n*** No study classes created yet. ***")
+            return
+        else:
+            group_names = [] # това трябва да ми е х (от долу) на хистограмата
+            number_of_students = [] # това трябва да ми е у (от ляво) на хистограмата
+            with open(database, "r") as file:
+                reader = csv.reader(file, delimiter="\t")
+                for group in reader:
+                    new_name = str(group)[2:-2]
+                    group_names.append(new_name)
+            for groups in range(len(group_names)):
+                count = 0
+                with open(f"{group_names[groups]}.csv", "r") as file:
+                    reader = csv.reader(file, delimiter="\t")
+                    for row in reader:
+                        count += 1
+                number_of_students.append(count - 1)
+            # plt.style.use("fivethirtyeight")
+            # plt.title("Number of students by groups")
+            # plt.xlabel("Groups")
+            # plt.ylabel("Number of students")
+            # plt.tight_layout()
+            # plt.hist(group_names, bins=10)
+            # plt.show()
+    elif choice == "2":
+        database = "teachers_database.csv"
+        if not os.path.exists(database):
+            print(f"\n*** No teacher's registrations created yet. ***")
+            return
+        else:
+            # хистограмата трябва да има по две барчета на човек. Едното да е годините стаж, другото да е възрастта
+            teachers_age = []
+            years_of_experience = []
+            date_now = datetime.datetime.now()
+            year = date_now.strftime("%Y")
+            with open(database, "r") as file:
+                reader = csv.reader(file, delimiter="\t")
+                for teacher in reader:
+                    if teacher[5] == "Birth" and teacher[6] == "Work":
+                        pass
+                    else:
+                        age = teacher[5][-4:]
+                        age_result = int(year) - int(age)
+                        teachers_age.append(age_result)
+                        experience = teacher[6][-4:]
+                        experience_result = int(year) - int(experience)
+                        years_of_experience.append(experience_result)
+                print(teachers_age)
+                print(years_of_experience)
+    elif choice == "3":
         return
 
 

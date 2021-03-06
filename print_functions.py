@@ -224,6 +224,7 @@ def print_delete_account():
           "\n\n# 3: Delete users information\n\n# 4: Quit"
           "\n\n**************************************")
 
+
 def print_class_menu():
     """
     Printing menu with options about study classes for the administrator.
@@ -235,4 +236,17 @@ def print_class_menu():
           "\n"
           "\n# 1: Show all study classes\n\n# 2: Create new study class\n\n# 3: Edit study class name"
           "\n\n# 4: Delete study class\n\n# 5: Quit"
+          "\n*****************************************************")
+
+
+def school_information():
+    """
+    Printing menu with options about the school for the administrator.
+    1:  Number of students by groups; 2: Age and years of experience; 3: Quit"
+    """
+    print("\n*********** INFORMATION ABOUT PRIMARY SCHOOL 'PYTHON' *********"
+          "\n"
+          "\nChoose a number from 1 to 3 from the below options:"
+          "\n# 1: Showing the number of students by groups\n\n# 2: Showing the age and years "
+          "of experience of the teachers\n\n# 3: Quit"
           "\n*****************************************************")

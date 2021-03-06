@@ -67,7 +67,6 @@ def show_groups_database_with_students():
                         reader_1 = csv.reader(file_2, delimiter="\t")
                         a = f"\n************** LIST OF {group_name} **************"
                         print(a)
-                        print("\n\t\tFirst name\tLast name\tE-mail address")
                         for row_1 in reader_1:
                             print(f"\n\t\t{row_1[0]} {row_1[1]} {row_1[2]}")
                         print("\n", "*" * len(a))

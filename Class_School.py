@@ -85,27 +85,21 @@ class School:
             if choice == "No":
                 return
             else:
-                first_name = input("\nEnter teacher's first name: ").capitalize().strip()
-                while check_name(first_name, 2, 20) and check_language(first_name):
-                    print(f"\n*** Enter teacher's first name again. Wrong length (2-20) or language (en or bg)."
-                          f" You had entered {first_name} ***")
-                    first_name = input("\nEnter teacher's first name: ").capitalize().strip()
-                last_name = input("\nEnter teacher's last name: ").capitalize().strip()
-                while check_name(last_name, 5, 20) and check_language(last_name):
-                    print(f"\n*** Enter teacher's name again. Wrong length (5-20) or language (en or bg)."
-                          f" You had entered {last_name} ***")
-                    last_name = input("\nEnter teacher's last name: ").capitalize().strip()
+                email = input("\nEnter teacher's email address:\t")
+                while check_email(email):
+                    print("\n*** Try again. ***")
+                    email = input("\nEnter teacher's email address:\t")
                 with open("teachers_database.csv", "r") as file_1:
                     reader = csv.reader(file_1, delimiter="\t")
                     temp_list = []
                     for row in reader:
-                        if first_name == row[0] and last_name == row[1]:
+                        if email == row[2]:
                             temp_list.append(row[0])
                             temp_list.append(row[1])
                             temp_list.append(row[4])
                             temp_list.append(row[6])
                     if not temp_list:
-                        print(f"\n*** {first_name} {last_name} does not exist. ***")
+                        print(f"\n*** Teacher with an e-mail address {email} does not exist. ***")
                     elif len(temp_list) == 4:
                         print("\n************* TEACHER INFORMATION *************")
                         print(f"\n\tName:"

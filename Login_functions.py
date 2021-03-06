@@ -98,6 +98,10 @@ def admin_login():
 
 
 def check_login_user(csv_file_name, email, password, string_name):
+    """
+    Login form for users. Entering email address and password.
+    If the user's email and password are in the databases, it will be possible to login.
+    """
     if os.path.exists(csv_file_name):
         with open(csv_file_name, "r") as file:
             reader = csv.reader(file, delimiter="\t")

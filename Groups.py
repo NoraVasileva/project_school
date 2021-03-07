@@ -86,6 +86,7 @@ def edit_group_name():
     show_only_groups()
     name = input("\nWhich study class name do you want to edit?:\t").strip().title()
     name_csv = f"{name}.csv"
+    groups = []
     if os.path.exists(name_csv):
         new_name = input("\nEnter new study class name:\t").strip().title()
         while new_name == "":
@@ -93,23 +94,18 @@ def edit_group_name():
         new_name_csv = f"{new_name}.csv"
         os.rename(name_csv, new_name_csv)
         with open(database, "r") as f:
-            groups = []
+
             reader = f.readlines()
             for row in reader:
                 new_var = row.replace('\n', '')
                 groups.append(new_var)
-                print(row)
-                print("")
         groups.remove(name)
         groups.append(new_name)
-# TODO: да попитам Милена защо имената на групите ми се записват във файла groups_database.csv по странен начин
         with open(database, "w") as file:
-            writer = csv.writer(file)
+            list_of_groups = []
             for gr in range(len(groups)):
-                print(gr)
-                writer.writerow(groups[gr])
-
-        print(groups)
+                list_of_groups.append(groups[gr]+"\n")
+            file.writelines(list_of_groups)
         print(f"\n*** {name} was successfully edited to {new_name}. ***")
     else:
         print(f"\n*** Study class '{name}' does not exists. ***")
@@ -169,11 +165,11 @@ def delete_group():
                     new_var = row.replace('\n', '')
                     groups.append(new_var)
             groups.remove(name)
-            # TODO: да попитам Милена защо имената на групите ми се записват във файла groups_database.csv по странен начин
             with open(database, "w") as file:
-                writer = csv.writer(file)
+                list_of_groups = []
                 for gr in range(len(groups)):
-                    writer.writerow(groups[gr])
+                    list_of_groups.append(groups[gr] + "\n")
+                file.writelines(list_of_groups)
 
 
 def os_path_exists_group(group):

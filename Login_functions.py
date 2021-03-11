@@ -26,7 +26,7 @@ def login():
         else:
             return
 
-# TODO: да направя една обща функция за student_login и teacher_login
+
 def student_login():
     """
     Login form for students. Entering email address and password.
@@ -101,6 +101,11 @@ def check_login_user(csv_file_name, email, password, string_name):
     """
     Login form for users. Entering email address and password.
     If the user's email and password are in the databases, it will be possible to login.
+    :param csv_file_name: the name of the file
+    :param email: user's e-mail address
+    :param password: user's password
+    :param string_name: user or teacher
+    :return: False or user's options or teacher's options.
     """
     if os.path.exists(csv_file_name):
         with open(csv_file_name, "r") as file:

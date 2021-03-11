@@ -5,6 +5,9 @@ from print_functions import print_class_menu
 
 
 def groups_admin_menu():
+    """
+    Menu with options about study classes for the administrator.
+    """
     while True:
         print_class_menu()
         choice = input("\nEnter a number from 1 to 5:\t").strip()
@@ -73,6 +76,9 @@ def show_groups_database_with_students():
 
 
 def create_group():
+    """
+    Creating new study class. Option for the administrator.
+    """
     print("\n*** Creating new study class ***")
     name = input("\nEnter class name:\t").strip().title()
     while name == "":
@@ -81,6 +87,9 @@ def create_group():
 
 
 def edit_group_name():
+    """
+    Edit study class name. Option for the administrator.
+    """
     database = "groups_database.csv"
     print("\n*** Edit study class name ***")
     show_only_groups()
@@ -113,6 +122,9 @@ def edit_group_name():
 
 
 def delete_group():
+    """
+    Delete study class. Option for the administrator.
+    """
     database = "groups_database.csv"
     print("\n*** Delete study class ***")
     show_only_groups()
@@ -234,6 +246,9 @@ def find_group(group):
 
 
 def groups_teachers_menu():
+    """
+    Show all study classes. Option for teachers.
+    """
     while True:
         print("\n*********** INFORMATION ABOUT STUDY CLASSES *********"
               "\n"

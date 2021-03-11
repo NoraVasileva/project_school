@@ -1,30 +1,15 @@
 import csv
 import os
+import datetime
 from copy import deepcopy
-
 from Groups import find_group, show_only_groups
 from print_functions import print_no_students, print_no_teachers, print_reg_4, print_teacher_information
 from print_functions import print_edit_user, print_edit_user_information
-from Registration_functions import check_name, check_language, check_email, \
+from Registration_functions import check_name, check_email, \
     os_path_does_not_exists, date_check
-import datetime
 
 
 class School:
-# TODO: да помисля как да променя условията, които са ми if и else, да бъдат if, elif и else, за да нямам допълнителни условия в else.
-# TODO: да преговоря PANDAS и да намеря bar plot, join функцията
-# TODO: когато свършим целия проект да променим структурата на въвеждането във файловете, като използваме речници и Pandas
-# num_list = [str(num) for num in range(1, 5)] # TODO: да преговоря циклите на един ред и речниците на един ред
-# работи с по-малко елементи; речник на един ред: {num: num for num in range(1, 5)} - ключът и стойността са
-# еднакви числа
-# {key: value for key, value in zip(range(1, 5), range(10, 15)} - работи, когато ключът и
-# стойността са с еднаква дължина на списъка. range(1, 5) ни е списъка с числа на ключовете, а range(10, 15) ни
-# е списъка с числа на стойностите.
-# създаване на списък от тупъли (с две променливи - v, v): [(v, v) for v in range(1, 5)]
-# стойностите на променливите са еднакви числа
-# TODO: да помисля как да направя речник от тупъли на един ред; да създам списък от обекти на един ред; речник
-#  със списъци, които съдържат други списъци; да преговоря join
-
     def os_path_exists_database(self, database):
         """
         Check for user accounts in the database.
@@ -440,7 +425,6 @@ class School:
                         self.overwriting_the_database(database_for_approval, temp_list)
 
     def deny_user(self, email, user):
-        # TODO: да се сложат променливите в речник, както направихме с edit_user - Направено е.
         """
         Rejection of user registration. The information about the user is transferred to the user database.
         :param email: user's e-mail address
@@ -554,10 +538,9 @@ class School:
         Editing student's or user's information. Show menu with options for the administrator.
         Overwriting the database with the edited information.
         :param database: the name of the database
+        :param user_name: user's name
         :param email: teacher's e-mail address
         """
-        # TODO: да направя edit_information_list в речник, за записване на файловете използвам функцията values, за да превърна речника в списък, който
-        # да добавям във файла
         edited_information_list = self.os_path_exists(email, database)
         original_info_list = deepcopy(edited_information_list)
         students_database = "students_database.csv"
@@ -706,8 +689,3 @@ class School:
             print("\n*** Work experience edited successfully. ***")
         self.overwriting_the_database(teachers_database, original_info_list)
         self.write_in_database(teachers_database, edited_information_list)
-
-
-
-
-

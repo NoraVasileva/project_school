@@ -2,9 +2,14 @@ from Class_People import People
 
 
 class Teacher(People):
-    """Information about teachers"""
+    """
+    Information about teachers.
+    """
     def __init__(self, **kwargs):
-        """Entering attributes"""
+        """
+        Entering attributes.
+        :param **kwargs: input variables.
+        """
         super().__init__(first_name=kwargs["first_name"], last_name=kwargs["last_name"],
                          email=kwargs["email"], password=kwargs["password"])
         self.__group = list(kwargs["group"])
@@ -16,70 +21,110 @@ class Teacher(People):
         self.__first_year_of_work = kwargs["first_year_of_work"]
 
     def add_group(self, group):
-        """Add group into list"""
+        """
+        Add group into list.
+        :param group: name of the group
+        """
         self.__group.append(group)
 
     def delete_group(self, group):
-        """Delete group from the list"""
+        """
+        Delete group from the list.
+        :param group: name of the group
+        """
         try:
             self.__group.remove(group)
         except:
             print("This group doesn't exist.")
 
     def get_group(self):
-        """Display group list"""
+        """
+        Display group list.
+        """
         return self.__group
 
     def set_date_of_birth(self, new_date):
-        """Edit date of birth attribute"""
+        """
+        Edit date of birth attribute.
+        :param new_date: edited date of birth
+        """
         self.__date_of_birth = new_date
 
     def get_date_of_birth(self):
-        """Display date of birth attribute"""
+        """
+        Display date of birth attribute.
+        """
         return self.__date_of_birth
 
     def set_month_of_birth(self, new_month):
-        """Edit month of birth attribute"""
+        """
+        Edit month of birth attribute.
+        :param new_month: edited month of birth
+        """
         self.__month_of_birth = new_month
 
     def get_month_of_birth(self):
-        """Display month of birth attribute"""
+        """
+        Display month of birth attribute.
+        """
         return self.__month_of_birth
 
     def set_year_of_birth(self, new_year):
-        """Edit year of birth attribute"""
+        """
+        Edit year of birth attribute.
+        :param new_year: edited year of birth
+        """
         self.__year_of_birth = new_year
 
     def get_year_of_birth(self):
-        """Display year of birth attribute"""
+        """
+        Display year of birth attribute.
+        """
         return self.__year_of_birth
 
     def set_first_day_of_work(self, new_day):
-        """Edit first day of work attribute"""
+        """
+        Edit first day of work attribute.
+        :param new_day: edited first day of work
+        """
         self.__first_day_of_work = new_day
 
     def get_first_day_of_work(self):
-        """Display first day of work attribute"""
+        """
+        Display first day of work attribute.
+        """
         return self.__first_day_of_work
 
     def set_first_month_of_work(self, new_month):
-        """Edit first month of work attribute"""
+        """
+        Edit first month of work attribute.
+        :param new_month: edited first month of work
+        """
         self.__first_month_of_work = new_month
 
     def get_first_month_of_work(self):
-        """Display first month of work attribute"""
+        """
+        Display first month of work attribute.
+        """
         return self.__first_month_of_work
 
     def set_first_year_of_work(self, new_year):
-        """Edit first year of work attribute"""
+        """
+        Edit first year of work attribute.
+        :param new_year: edited first year of work
+        """
         self.__first_year_of_work = new_year
 
     def get_first_year_of_work(self):
-        """Display first year of work attribute"""
+        """
+        Display first year of work attribute.
+        """
         return self.__first_year_of_work
 
     def __str__(self):
-        """Display the information about teacher"""
+        """
+        Display the information about teacher.
+        """
         return f"First name: {super().get_first_name()}," \
                f"Last name: {super().get_last_name()}, Group: {self.__group}"
 

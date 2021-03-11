@@ -13,7 +13,7 @@ from print_functions import print_teacher_options, print_admin_options, print_us
 
 def teacher_options():
     """
-
+    Menu with options for teachers. Show all study classes, show all teachers or quit.
     """
     while True:
         print_teacher_options()
@@ -31,7 +31,9 @@ def teacher_options():
 
 
 def admin_options():
-# TODO: да се поправи цикълът, защото не ме връща на предишните менюта като натиксам quit
+    """
+    Menu with options for the administrator. User's management, class management, school information or quit.
+    """
     while True:
         print_admin_options()
         choice = input("\nEnter a number from 1 to 4:\t").strip()
@@ -49,6 +51,9 @@ def admin_options():
 
 
 def admin_options_1():
+    """
+    User's management menu with options for the administrator. Registrations, user accounts or quit.
+    """
     print_users_management()
     choice_1 = input("\nEnter a number from 1 to 3:\t")
     while choice_1 != "1" and choice_1 != "2" and choice_1 != "3":
@@ -63,6 +68,11 @@ def admin_options_1():
 
 
 def admin_option_2():
+    """
+    Menu with registrations for approval with options for the administrator. Student registrations,
+    teacher registrations or quit.
+    """
+
     print_registrations()
     choice_2 = input("\nEnter a number from 1 to 3:\t")
     while choice_2 != "1" and choice_2 != "2" and choice_2 != "3":
@@ -79,6 +89,9 @@ def admin_option_2():
 
 
 def admin_options_3():
+    """
+    User account menu with options for the administrator. Show users, edit user, delete user or quit.
+    """
     admin = School()
     print_user_accounts()
     students_database = "students_database.csv"
@@ -135,6 +148,9 @@ def admin_options_3():
 
 
 def admin_options_4():
+    """
+    User accounts menu with options for the administrator. Show users, show students, show teachers or quit.
+    """
     print_show_users()
     choice_4 = input("\nEnter a number from 1 to 4:\t")
     while choice_4 != "1" and choice_4 != "2" and choice_4 != "3" and choice_4 != "4":
@@ -152,8 +168,12 @@ def admin_options_4():
     else:
         return
 
-# TODO: да се довърши
+
 def admin_options_5():
+    """
+    Menu with options about the school for the administrator. Number of students by groups, age and years of
+    experience or quit.
+    """
     school_information()
     choice = input("\nEnter a number from 1 to 3:\t")
     while choice != "1" and choice != "2" and choice != "3":
@@ -190,7 +210,6 @@ def admin_options_5():
             print(f"\n*** No teacher's registrations created yet. ***")
             return
         else:
-            # TODO: да редактирам слайсинга - вместо него да използвам datetime обект, който да е с точки и да изваждам от него.
             teachers_age = []
             years_of_experience = []
             age_and_experience_y = []
@@ -225,6 +244,9 @@ def admin_options_5():
 
 
 def user_options():
+    """
+    User's menu with options. Show all teachers or quit.
+    """
     while True:
         print_user_options()
         choice = input("\nEnter a number from 1 to 2:\t").strip()
